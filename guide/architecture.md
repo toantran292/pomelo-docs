@@ -262,6 +262,19 @@ coherent:
 
 ## Concurrency & safety
 
+- **Token-authenticated dashboard.** The server binds on the LAN for
+  multi-device access, so every route sits behind a per-install access
+  token (delivered once in the launch URL, then a cookie). Requests with a
+  foreign `Origin` are rejected outright — a malicious web page in your
+  browser can't reach the WebSocket even though WS ignores CORS. Only the
+  PWA manifest and icons are public.
+- **Race-free config reloads.** The live config is held behind an atomic
+  pointer; a reload swaps it wholesale while handlers and background loops
+  keep reading a consistent snapshot. Runtime toggles (like a service's
+  dev/build mode) live on the server, not on the shared config object.
+- **Bounded subprocesses.** Anything that can touch the network (git
+  fetch/pull/clone, gh, docker) runs with a timeout, so a hung remote can
+  never wedge a request or a background loop.
 - **File locks for shared state** — `WithProjectLock` guards
   `network.json`; `withSlotLock` guards `shared_slots.json`. No
   read-modify-write happens without a lock.

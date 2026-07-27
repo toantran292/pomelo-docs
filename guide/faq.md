@@ -15,6 +15,21 @@ The dashboard runs a preflight check and shows a banner under the topbar:
 
 Both link to the install steps above. See [Dependencies](#dependencies).
 
+## The dashboard says "access token required"
+
+Every dashboard request is authenticated with a per-install token so
+nothing else on your network (or a malicious web page in your browser)
+can reach your terminals. The token rides in the launch URL and becomes a
+cookie on first visit. If you land on the 401 page — new browser, cleared
+cookies, a bookmarked bare URL — run:
+
+```bash
+tncli web url    # prints the localhost + LAN URLs with the token
+```
+
+and open that. The token lives in `~/.local/state/tncli/web_token`;
+deleting the file rotates it on next launch.
+
 ## A service starts fine in my terminal but fails under tncli
 
 Services run via `zsh -ic` (an **interactive** shell) so your `~/.zshrc`
