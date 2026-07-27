@@ -74,6 +74,15 @@ Redis, …) are up. Ports are shown per service and are stable across
 restarts. Keyboard: arrow keys move focus, Enter starts/stops, `r`
 restarts, `o` opens in the browser, `/` opens quick-launch.
 
+## Install as an app
+
+The dashboard is a PWA: in Chrome/Edge/Arc/Dia use the address-bar
+**Install** action (or menu → *Install app*), on Safari (macOS Sonoma+)
+use **File → Add to Dock**, and on iOS **Share → Add to Home Screen**.
+You get a standalone window with its own Dock icon and ⌘-Tab entry — no
+address bar, no risk of closing it as a stray tab. It's still the same
+local server underneath, so nothing else changes.
+
 ## Themes & motion
 
 The dashboard ships **three themes** — dark, light, and sepia — switchable
