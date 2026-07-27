@@ -60,6 +60,12 @@ rest. Check rows link to their logs. Status is fetched by exact head
 branch in batched GraphQL requests — complete and low-traffic (see
 [Architecture](./architecture#what-keeps-the-dashboard-fast)).
 
+Hovering the sidebar PR pill also shows, per branch, how many commits it
+is **behind the default branch** (e.g. `↓12 behind`) — a quick cue that a
+branch has drifted and may want a rebase before merging. This is computed
+locally from the worktree, so it costs no GitHub API calls; the default
+branch is refreshed in the background so the count stays current.
+
 ## Services & shared infra
 
 The overview groups services by repo. Start or stop any service in place;
