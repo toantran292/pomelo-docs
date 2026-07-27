@@ -262,12 +262,13 @@ coherent:
 
 ## Concurrency & safety
 
-- **Token-authenticated dashboard.** The server binds on the LAN for
-  multi-device access, so every route sits behind a per-install access
-  token (delivered once in the launch URL, then a cookie). Requests with a
-  foreign `Origin` are rejected outright — a malicious web page in your
-  browser can't reach the WebSocket even though WS ignores CORS. Only the
-  PWA manifest and icons are public.
+- **Layered dashboard auth.** A foreign `Origin` is rejected outright on
+  every route — a malicious web page can't reach the WebSocket even though
+  WS ignores CORS, and that alone secures loopback, so `127.0.0.1` needs no
+  token. LAN clients (a non-loopback TCP peer, judged from `RemoteAddr`,
+  never a spoofable header) must present a per-install token, delivered
+  once in the LAN launch URL and then stored as a cookie. Only the PWA
+  manifest and icons are fully public.
 - **Race-free config reloads.** The live config is held behind an atomic
   pointer; a reload swaps it wholesale while handlers and background loops
   keep reading a consistent snapshot. Runtime toggles (like a service's

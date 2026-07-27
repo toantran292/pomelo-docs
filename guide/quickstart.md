@@ -56,13 +56,13 @@ Creates `workspace--feature-x/api/` as a git worktree on branch `feature-x`, run
 tncli            # launches the web dashboard and opens your browser
 ```
 
-The printed URL includes a one-time-setup **access token**
-(`http://127.0.0.1:8765/?token=…`) — every request is authenticated, so
-other machines (or other websites open in your browser) can't touch your
-terminals. The browser stores it as a cookie after the first visit, so
-plain `http://127.0.0.1:8765` works from then on. To open the dashboard
-from another device on your LAN, use the printed LAN URL (or run
-`tncli web url` to print both again).
+On your own machine `http://127.0.0.1:8765` just works — no token needed.
+(Websites open in your browser still can't reach it: cross-origin requests
+are rejected outright.) To open the dashboard from **another device on
+your LAN**, use the printed LAN URL — it carries a one-time **access
+token** (`?token=…`) that authenticates that device; the browser stores it
+as a cookie after the first visit. Run `tncli web url` to print both URLs
+again.
 
 From the dashboard you can start and stop services, watch live logs, and
 shell into any tmux pane — all backed by the service tmux session over

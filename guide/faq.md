@@ -17,18 +17,19 @@ Both link to the install steps above. See [Dependencies](#dependencies).
 
 ## The dashboard says "access token required"
 
-Every dashboard request is authenticated with a per-install token so
-nothing else on your network (or a malicious web page in your browser)
-can reach your terminals. The token rides in the launch URL and becomes a
-cookie on first visit. If you land on the 401 page — new browser, cleared
-cookies, a bookmarked bare URL — run:
+That only happens over the **LAN** — on localhost the dashboard needs no
+token. Access from another device is gated by a per-install token so no
+one else on your network can reach your terminals. The token rides in the
+LAN launch URL and becomes a cookie on first visit; if a LAN device lands
+on the 401 page (new browser, cleared cookies, bookmarked bare URL), run:
 
 ```bash
-tncli web url    # prints the localhost + LAN URLs with the token
+tncli web url    # prints the localhost URL + the tokened LAN URL
 ```
 
-and open that. The token lives in `~/.local/state/tncli/web_token`;
-deleting the file rotates it on next launch.
+and open the LAN URL. The token lives in `~/.local/state/tncli/web_token`;
+deleting the file rotates it on next launch. (Malicious websites can't
+reach even localhost — cross-origin requests are rejected regardless.)
 
 ## A service starts fine in my terminal but fails under tncli
 
