@@ -45,6 +45,47 @@ tncli workspace delete <branch>
 A 5-stage pipeline tears it down: pre-delete hooks → stop services →
 drop databases → remove worktrees → release port block.
 
+When you delete from the web UI, the confirm dialog offers **“Archive to
+Markdown first”** (see below) so a finished ticket's context is captured
+before its worktree is gone.
+
+## Archive
+
+When a ticket is done and you're about to delete its workspace, you often
+still want the *story* — what was built, which bugs came up, how they were
+fixed — for later reference. **Archiving** captures that as a Markdown
+document.
+
+It gathers the ticket (from your Jira config, if set), the pull requests,
+the commits and diff stat, and the workspace's Claude Code session, then
+asks **your own `claude` CLI** to write a retrospective (overview, bugs &
+fixes with root causes, key decisions, PRs, follow-ups) in the same
+language the work was discussed in.
+
+Archives are saved per session under
+`~/.local/state/tncli/archives/<session>/<branch>.md`, so they **survive
+deleting the workspace** and stay retrievable long after.
+
+From the web UI: a workspace's **⋯** menu → **Archive to Markdown**, or tick
+the box in the delete dialog. Browse and read past archives from the
+**⤓** button in the sidebar footer.
+
+From the CLI:
+
+```bash
+tncli archive <branch>          # generate (invokes your claude CLI)
+tncli archive list              # list this session's archives
+tncli archive show <branch>     # print one
+tncli archive path              # print the archive directory
+```
+
+::: tip Uses your Claude plan
+Generating an archive runs `claude -p` on your machine, so it consumes
+tokens on your own Claude subscription/API. The Claude session transcript
+is bounded before it's sent, and if `claude` isn't available the collected
+context is still saved verbatim — you never end up with nothing.
+:::
+
 ## Recovery
 
 Workspace metadata lives entirely on disk (`.tncli/network.json` per
