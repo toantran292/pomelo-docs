@@ -79,6 +79,16 @@ tncli archive show <branch>     # print one
 tncli archive path              # print the archive directory
 ```
 
+### Recalling archives from a Claude session
+
+You don't have to remember any of this while working. When tncli launches
+a **Claude Code** window, it grants that session read access to this
+session's archive directory (`--add-dir`) and tells Claude the path plus
+the `tncli archive list` / `tncli archive show <branch>` commands. So mid-
+task you can just ask *"check the archive for `feat-x` — how did we fix
+that bug?"* and Claude reads or greps the past retrospectives directly. The
+grant is scoped to the current session's archives only.
+
 ::: tip Uses your Claude plan
 Generating an archive runs `claude -p` on your machine, so it consumes
 tokens on your own Claude subscription/API. The Claude session transcript
