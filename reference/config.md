@@ -218,3 +218,28 @@ pull request merges (and no PR on that workspace is still open). Detection
 runs in the server-side PR loop, so it works even with no browser open.
 **Off by default** because generating an archive runs your `claude` CLI and
 spends tokens. See [Workspace › Auto-archive on PR merge](../guide/workspace#auto-archive-on-pr-merge).
+
+## Sync
+
+Optional. Keeps `origin` current with each workspace's work, so you can
+fetch the latest — including an agent's in-progress edits — and continue on
+another machine.
+
+```yaml
+sync:
+  auto_push: true          # default false
+  interval_sec: 180        # how often to push (min 30)
+```
+
+When on, the server periodically (per branch worktree):
+
+- pushes new commits on the branch to `origin` (fast-forward; a diverged or
+  offline push is skipped quietly), and
+- snapshots the **uncommitted** working tree (tracked + untracked, respecting
+  `.gitignore`) to `refs/pom-wip/<branch>` and force-pushes that ref.
+
+`refs/pom-wip/*` is a **non-branch ref**: it doesn't appear in the branch
+list, open a PR, or trigger CI. It's created without touching your `HEAD` or
+staging area, and an unchanged tree never churns a new push. Toggle it under
+**Settings → Jira → Sync**. Runs server-side, so it keeps working with no
+browser open (e.g. under the [daemon](../guide/install#run-at-login-daemon)).
