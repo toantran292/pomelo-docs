@@ -7,7 +7,7 @@ ones. If something here is out of date, please open an issue.
 
 The dashboard runs a preflight check and shows a banner under the topbar:
 
-- **Required tool missing** (`git`, `tmux`, `zsh`) → a red banner — tncli
+- **Required tool missing** (`git`, `tmux`, `zsh`) → a red banner — Pomelo
   can't work without them.
 - **Optional tool missing** (`gh`, `claude`, `docker`) → a dismissible
   warning naming the feature it gates (PR status, agent tabs, shared
@@ -24,14 +24,14 @@ LAN launch URL and becomes a cookie on first visit; if a LAN device lands
 on the 401 page (new browser, cleared cookies, bookmarked bare URL), run:
 
 ```bash
-tncli web url    # prints the localhost URL + the tokened LAN URL
+pom web url    # prints the localhost URL + the tokened LAN URL
 ```
 
-and open the LAN URL. The token lives in `~/.local/state/tncli/web_token`;
+and open the LAN URL. The token lives in `~/.local/state/pom/web_token`;
 deleting the file rotates it on next launch. (Malicious websites can't
 reach even localhost — cross-origin requests are rejected regardless.)
 
-## A service starts fine in my terminal but fails under tncli
+## A service starts fine in my terminal but fails under Pomelo
 
 Services run via `zsh -ic` (an **interactive** shell) so your `~/.zshrc`
 is sourced and version managers (nvm, rvm, asdf) resolve the right
@@ -44,7 +44,7 @@ into the worktree and before the command.
 
 - Run `gh auth login` once — PR data comes from the GitHub CLI's token.
 - The repo needs a GitHub `origin` remote. **SSH host aliases work**
-  (e.g. `git@myalias:owner/repo` from your `~/.ssh/config`) — tncli reads
+  (e.g. `git@myalias:owner/repo` from your `~/.ssh/config`) — Pomelo reads
   `owner/repo` from any URL form.
 - A workspace shows **no PR pill** when its branch simply has no open PR.
   It's fetched by exact branch, so it won't miss one that exists.
@@ -59,8 +59,8 @@ has **Add repos…** and **Reset databases…**.
 ## How do I add a repo to the project?
 
 Right-click the **main** workspace → **Add repo (clone from URL)…**, paste
-a git URL (SSH or HTTPS; aliases work). tncli clones it into the main
-workspace, registers it in `tncli.yml`, and reloads — no restart. On a
+a git URL (SSH or HTTPS; aliases work). Pomelo clones it into the main
+workspace, registers it in `pom.yml`, and reloads — no restart. On a
 **branch** workspace, right-click → **Add repos…** instead adds worktrees
 for repos already declared in the project.
 
@@ -77,7 +77,7 @@ delete the **active** session — switch to another first.
   (Linux/Windows). Plain **Ctrl+C** is left for the app (interrupt /
   Claude's cancel).
 - Over a **LAN IP** (`http://192.168.x.x:…`) the browser blocks the
-  Clipboard API; tncli falls back automatically, but for full clipboard
+  Clipboard API; Pomelo falls back automatically, but for full clipboard
   access open the dashboard on **`localhost`**.
 - Right-click → **Copy** works too, and keeps your selection.
 
@@ -101,7 +101,7 @@ service a stable offset, persisted in `.tncli/network.json`. Ports are
 Deleting a `workspace--…/<repo>` folder with `rm -rf` (instead of the
 Delete action) leaves git with a stale worktree registration, so creating
 that branch again fails with *"'…' is already used by worktree at …"*.
-tncli now **prunes stale registrations automatically** before adding a
+Pomelo now **prunes stale registrations automatically** before adding a
 worktree, so a retry usually just works. If you're on an older build or a
 folder is only half-removed, clear it manually from any worktree of that
 repo:
@@ -115,7 +115,7 @@ git worktree remove --force <the-path-in-the-error>
 git worktree prune
 ```
 
-Prefer the **Delete workspace** action (or `tncli workspace delete`) — it
+Prefer the **Delete workspace** action (or `pom workspace delete`) — it
 removes worktrees, databases and port leases together, so nothing goes
 stale.
 
@@ -131,9 +131,9 @@ On three events, and only then: **workspace create**, **service start**
 (picks up config edits before launch), and an **env-profile switch**. So
 edit config, then start — the env reflects it.
 
-## Can I run tncli from any directory?
+## Can I run Pomelo from any directory?
 
-Yes. Bare `tncli` opens the dashboard; it finds `tncli.yml` by walking up
+Yes. Bare `pom` opens the dashboard; it finds `pom.yml` by walking up
 from the current directory, and otherwise falls back to your current
 session. Creating a new session (sidebar) clones each repo from its
 **git URL** (SSH or HTTPS). A clone doesn't bring git-ignored files like

@@ -1,11 +1,11 @@
 # Install
 
-tncli itself is a single binary, but it drives a few external tools. Make
+Pomelo itself is a single binary, but it drives a few external tools. Make
 sure the ones you need are installed before you start.
 
 ## Dependencies
 
-| Tool | Required? | What tncli uses it for |
+| Tool | Required? | What Pomelo uses it for |
 | :--- | :--- | :--- |
 | **git** | Required | Per-workspace worktrees. |
 | **tmux** | Required | Every service/agent runs in a tmux window (persistent logs, reconnect). |
@@ -66,7 +66,7 @@ git --version && tmux -V && gh --version && claude --version
 ::: tip Renamed from `tncli`
 The tool is now **Pomelo**, command **`pom`**. Already on `tncli`? Just run
 `tncli update` once — it lands you on Pomelo, adds the `pom` command (with a
-`tncli` compat symlink), and future updates flow automatically. Your
+`tncli` compat symlink), and future updates flow automatically. Your existing
 `tncli.yml` keeps working; new projects can use `pom.yml`.
 :::
 

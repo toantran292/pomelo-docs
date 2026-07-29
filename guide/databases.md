@@ -1,8 +1,8 @@
 # Databases
 
-tncli auto-provisions one database per workspace per template, using
+Pomelo auto-provisions one database per workspace per template, using
 the shared service's admin credentials. You declare names with
-templates; tncli does the create/drop/seed dance.
+templates; Pomelo does the create/drop/seed dance.
 
 ## Declare
 
@@ -52,9 +52,9 @@ drop, or reset all databases for that workspace at once.
 From the CLI:
 
 ```bash
-tncli db list                  # show databases per workspace
-tncli db reset <branch>        # drop + recreate all DBs for a workspace
-tncli db clean                 # remove orphan DBs (no matching workspace)
+pom db list                  # show databases per workspace
+pom db reset <branch>        # drop + recreate all DBs for a workspace
+pom db clean                 # remove orphan DBs (no matching workspace)
 ```
 
 `db clean` is conservative: it prompts before each delete and refuses to

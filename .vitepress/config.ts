@@ -1,13 +1,13 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'tncli',
+  title: 'Pomelo',
   description: 'Workspace + service manager for dev (tmux + Docker + Git worktrees)',
   base: '/tncli-docs/',
   cleanUrls: true,
   ignoreDeadLinks: true,
 
-  // tncli docs are full of `{{var:NAME}}` / `{{db:name}}` templates. Inside
+  // Pomelo docs are full of `{{var:NAME}}` / `{{db:name}}` templates. Inside
   // code, Vue's template tokenizer still scans `{{ }}` (even under v-pre)
   // and errors on the `:` (reads it as a TS annotation). Rather than change
   // Vue's delimiters globally — which breaks the default theme's own
@@ -28,7 +28,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/install' },
       { text: 'Reference', link: '/reference/config' },
-      { text: 'Releases', link: 'https://github.com/toantran292/tncli-releases/releases' }
+      { text: 'Releases', link: 'https://github.com/toantran292/pomelo-releases/releases' }
     ],
 
     sidebar: {
@@ -62,7 +62,7 @@ export default defineConfig({
         {
           text: 'Reference',
           items: [
-            { text: 'tncli.yml', link: '/reference/config' },
+            { text: 'pom.yml', link: '/reference/config' },
             { text: 'CLI commands', link: '/reference/cli' },
             { text: 'Templates', link: '/reference/templates' }
           ]
@@ -73,7 +73,7 @@ export default defineConfig({
     search: { provider: 'local' },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/toantran292/tncli-releases' }
+      { icon: 'github', link: 'https://github.com/toantran292/pomelo-releases' }
     ],
 
     footer: {

@@ -5,7 +5,7 @@ A short tour of the moving parts before you dive deeper.
 ## Workspace
 
 A **workspace** is one isolated copy of your project, anchored to a git
-branch. tncli creates it as a sibling folder named `workspace--<branch>/`
+branch. Pomelo creates it as a sibling folder named `workspace--<branch>/`
 containing one git worktree per repo. Each workspace has its own:
 
 - Branch checkout for every repo it includes
@@ -18,7 +18,7 @@ worktrees never collide.
 
 ## Repo
 
-A **repo** is one source directory listed under `repos:` in `tncli.yml`.
+A **repo** is one source directory listed under `repos:` in `pom.yml`.
 Each repo declares its own setup commands, env templates, shared
 services, and named services. A workspace contains one git worktree per
 repo it activates.
@@ -41,7 +41,7 @@ services:
 ## Shared services
 
 Containers shared across all workspaces — Postgres, Redis, MinIO, etc. —
-declared under `shared_services:`. tncli starts them with docker-compose
+declared under `shared_services:`. Pomelo starts them with docker-compose
 and exposes them on dynamic ports referenced via `{{port:NAME}}` and
 `{{conn:NAME}}` templates.
 
@@ -68,12 +68,12 @@ combos:
 
 ## Session
 
-tncli runs your services inside a tmux **service session**
+Pomelo runs your services inside a tmux **service session**
 (`tncli_<project>`) that holds one window per running service. It
-survives closing the browser or killing `tncli` — reconnect and the
+survives closing the browser or killing `pom` — reconnect and the
 windows are still there.
 
-The web companion (bare `tncli`) attaches to that service session over
+The web companion (bare `pom`) attaches to that service session over
 WebSocket and mirrors each pane in the browser with xterm.js, so you can
 read logs and shell in without leaving the dashboard.
 

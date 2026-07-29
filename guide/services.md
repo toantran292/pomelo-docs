@@ -6,7 +6,7 @@ and you can re-attach across restarts.
 
 ## Declare
 
-In `tncli.yml`:
+In `pom.yml`:
 
 ```yaml
 repos:
@@ -31,7 +31,7 @@ repos:
 | `env` | Extra env vars merged over repo-level env. Templates allowed. |
 | `pre_start` | One-shot command run after `cd` but before `cmd` (e.g. `nvm use`). |
 | `dir` | Subdirectory inside the worktree to `cd` into. |
-| `mode` + `modes` | Two-state toggle (e.g. `dev` vs `build`). Switch from the web UI or `tncli restart`. |
+| `mode` + `modes` | Two-state toggle (e.g. `dev` vs `build`). Switch from the web UI or `pom restart`. |
 
 ## Publishing & switching URLs
 
@@ -69,25 +69,25 @@ once. There's also a control to stop everything in the project.
 A service's port is deterministic per (workspace, service), and a workspace
 only ever claims a port **region (block) that is entirely free**. Starting a
 service checks its port first: if the region got contaminated (a stale
-process, a crash leftover), tncli **moves the whole workspace to a fresh,
+process, a crash leftover), Pomelo **moves the whole workspace to a fresh,
 fully-free region** and starts there — it never starts on a taken port. Only
 when there's no clean region left does it refuse, telling you what's holding
 the port (`port 40200 is in use by node (pid 4123)…`); free it (kill it) or
-run **Refresh tncli** / `tncli refresh` to clear the session and reclaim
+run **Refresh Pomelo** / `pom refresh` to clear the session and reclaim
 ports.
 :::
 
 From the CLI:
 
 ```bash
-tncli start <service|combo>
-tncli stop  [service|combo]   # no arg → stop all
-tncli restart <service|combo>
-tncli status                  # list running services with PIDs
-tncli refresh                 # clear this project's tmux session (free ports)
+pom start <service|combo>
+pom stop  [service|combo]   # no arg → stop all
+pom restart <service|combo>
+pom status                  # list running services with PIDs
+pom refresh                 # clear this project's tmux session (free ports)
 ```
 
-`tncli refresh` is the CLI counterpart of the web **Refresh tncli** — it
+`pom refresh` is the CLI counterpart of the web **Refresh Pomelo** — it
 kills the project's tmux session (every window) so stuck panes / orphaned
 ports are released; worktrees, config and shared containers are untouched.
 
@@ -111,8 +111,8 @@ the service for an interactive REPL.
 From the CLI:
 
 ```bash
-tncli logs <service>          # recent output (snapshot)
-tncli attach <service>        # attach the service's tmux window
+pom logs <service>          # recent output (snapshot)
+pom attach <service>        # attach the service's tmux window
 ```
 
 `attach` drops you into the actual session — detach with the usual

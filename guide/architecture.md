@@ -1,17 +1,17 @@
 # Architecture
 
-How tncli is built, and the techniques it uses to stay fast and correct.
+How Pomelo is built, and the techniques it uses to stay fast and correct.
 This page is the "how it actually works" companion to
 [Concepts](./concepts) — read that first for the vocabulary.
 
 ## One binary, two front-ends
 
-tncli ships as a **single Go binary** with no runtime dependencies beyond
+Pomelo ships as a **single Go binary** with no runtime dependencies beyond
 `tmux`, `git`, and (optionally) `docker`. It exposes the same core two
 ways:
 
-- **CLI** — `tncli <command>` for scripting and one-off actions.
-- **Web dashboard** — bare `tncli` starts an HTTP + WebSocket server and
+- **CLI** — `pom <command>` for scripting and one-off actions.
+- **Web dashboard** — bare `pom` starts an HTTP + WebSocket server and
   opens a browser UI. The React/Vite frontend is compiled and embedded
   into the binary with `go:embed`, so there is nothing separate to serve
   or deploy.
@@ -47,7 +47,7 @@ branch was later renamed. This keeps a workspace's identity stable.
 
 ## Port management
 
-Ports are the classic source of "works on my machine" collisions. tncli
+Ports are the classic source of "works on my machine" collisions. Pomelo
 removes the guesswork with a **deterministic, layered allocation** that is
 persisted so a service keeps the same port across restarts.
 
@@ -70,11 +70,11 @@ persisted so a service keeps the same port across restarts.
   service's offset from the shared base. Because the maps are persisted,
   ports are **reproducible** — restart a service and it lands on the same
   port every time.
-- **Session slots** (`~/.tncli/slots.json`) assign a global slot per
+- **Session slots** (`~/.local/state/pom/slots.json`) assign a global slot per
   session so two sessions on the same machine never overlap on ports. The
   pool divides into `max_sessions` equal slots (subnet-style) —
-  configurable in Settings › **tncli (global) › Sessions & slots**
-  (`~/.tncli/config.json`, machine-wide, not per-session); slot size and
+  configurable in Settings › **Pomelo (global) › Sessions & slots**
+  (`~/.local/state/pom/config.json`, machine-wide, not per-session); slot size and
   workspaces-per-session are derived from it. A session is assigned its
   slot **the first time it starts a service** and **keeps it until the
   session is deleted** — `slots.json` is the single authority for
@@ -109,7 +109,7 @@ env:
 
 Each service runs as **one tmux window** inside the project's service
 session (`tncli_<project>`). That gives you persistent, recoverable logs
-for free — close the browser or kill `tncli` and the windows keep
+for free — close the browser or kill `pom` and the windows keep
 running; reconnect and they're still there.
 
 - Services launch through `zsh -ic` (an **interactive** shell) so your
@@ -142,7 +142,7 @@ isolation happens at the *data* layer, not by running N copies.
 - **Capacity-based slots.** A service with a `capacity:` (for example, the
   16 logical Redis databases) hands each workspace a distinct slot index
   via `{{slot:NAME}}`, so workspaces share one Redis process but never
-  collide on a DB index. Allocations live in `~/.tncli/shared_slots.json`
+  collide on a DB index. Allocations live in `~/.local/state/pom/shared_slots.json`
   behind a slot lock (`withSlotLock`).
 - **Start-on-demand dependency.** Starting a repo service first ensures
   its shared services are up (`docker compose up -d`) — you don't have to
@@ -283,6 +283,6 @@ coherent:
   separate strings, so branch names and paths can't be interpolated into a
   shell. Where a multi-command pipeline is unavoidable, inputs are
   sanitized (`BranchSafe`) first.
-- **`sudo` is confined to `tncli setup`.** Every runtime command —
+- **`sudo` is confined to `pom setup`.** Every runtime command —
   `start`, `workspace create`, `proxy` — runs without elevated
   privileges.

@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: tncli
+  name: Pomelo
   text: Workspace + service manager
   tagline: tmux · Docker · Git worktrees · in your browser
   actions:
@@ -11,7 +11,7 @@ hero:
       link: /guide/install
     - theme: alt
       text: View on GitHub
-      link: https://github.com/toantran292/tncli-releases
+      link: https://github.com/toantran292/pomelo-releases
 
 features:
   - title: Multi-workspace

@@ -1,7 +1,7 @@
 # Template variables
 
 The values in `env:`, `databases:`, `services.<name>.cmd`, and a handful
-of other fields are templates. tncli resolves them when materializing
+of other fields are templates. Pomelo resolves them when materializing
 each workspace, substituting values from the network state, shared
 services, and the workspace's branch.
 

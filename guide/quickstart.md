@@ -1,6 +1,6 @@
 # Quick Start
 
-## 1. Create `tncli.yml`
+## 1. Create `pom.yml`
 
 In your monorepo root:
 

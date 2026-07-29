@@ -1,6 +1,6 @@
-# tncli docs
+# Pomelo docs
 
-Documentation for [tncli](https://github.com/toantran292/tncli-releases).
+Documentation for [Pomelo](https://github.com/toantran292/pomelo-releases).
 
 ## Local dev
 

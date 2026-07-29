@@ -13,7 +13,7 @@ and/or a description (they form the branch), and pick the repos.
 
 Leave **“Start Claude on this ticket after creating”** ticked (the default)
 and the button becomes **Create & assign**: once the workspace is built —
-worktrees, per-branch databases, ports, env all provisioned — tncli opens
+worktrees, per-branch databases, ports, env all provisioned — Pomelo opens
 a Claude session in it that's **already primed with the ticket** (its
 summary and description are injected into the session's context) and wired
 to the [MCP tools](#agent-tools-mcp). You review and say "go" — the agent
@@ -25,7 +25,7 @@ not.
 From the CLI:
 
 ```bash
-tncli workspace create <combo> <branch>
+pom workspace create <combo> <branch>
 ```
 
 Behind the scenes a 7-stage pipeline runs (validate → provision → infra
@@ -39,7 +39,7 @@ row to add or remove individual repos.
 ## List
 
 ```bash
-tncli workspace list
+pom workspace list
 ```
 
 Each row shows the branch, included repos, current running services
@@ -52,7 +52,7 @@ From the web UI: use the delete control on a workspace row, then confirm.
 From the CLI:
 
 ```bash
-tncli workspace delete <branch>
+pom workspace delete <branch>
 ```
 
 A 5-stage pipeline tears it down: pre-delete hooks → stop services →
@@ -76,7 +76,7 @@ fixes with root causes, key decisions, PRs, follow-ups) in the same
 language the work was discussed in.
 
 Archives are saved per session under
-`~/.local/state/tncli/archives/<session>/<branch>.md`, so they **survive
+`~/.local/state/pom/archives/<session>/<branch>.md`, so they **survive
 deleting the workspace** and stay retrievable long after.
 
 From the web UI: a workspace's **⋯** menu → **Archive to Markdown**, or tick
@@ -86,18 +86,18 @@ the box in the delete dialog. Browse and read past archives from the
 From the CLI:
 
 ```bash
-tncli archive <branch>          # generate (invokes your claude CLI)
-tncli archive list              # list this session's archives
-tncli archive show <branch>     # print one
-tncli archive path              # print the archive directory
+pom archive <branch>          # generate (invokes your claude CLI)
+pom archive list              # list this session's archives
+pom archive show <branch>     # print one
+pom archive path              # print the archive directory
 ```
 
 ### Recalling archives from a Claude session
 
-You don't have to remember any of this while working. When tncli launches
+You don't have to remember any of this while working. When Pomelo launches
 a **Claude Code** window, it grants that session read access to this
 session's archive directory (`--add-dir`) and tells Claude the path plus
-the `tncli archive list` / `tncli archive show <branch>` commands. So mid-
+the `pom archive list` / `pom archive show <branch>` commands. So mid-
 task you can just ask *"check the archive for `feat-x` — how did we fix
 that bug?"* and Claude reads or greps the past retrospectives directly. The
 grant is scoped to the current session's archives only.
@@ -113,7 +113,7 @@ context is still saved verbatim — you never end up with nothing.
 
 A Claude Code session running in a workspace can't see its own environment
 by default — which port its dev server got, which database to migrate,
-whether a service is even up. tncli closes that gap: when it launches a
+whether a service is even up. Pomelo closes that gap: when it launches a
 Claude window it registers an **MCP server** scoped to that workspace, so
 the agent can inspect and act on the *real running stack* it lives in.
 
@@ -123,26 +123,26 @@ The tools:
 | --- | --- |
 | `workspace_info` / `services` / `ports` | See the branch, its repos, and each service's running state + allocated port |
 | `databases` | Get ready-to-use per-branch Postgres connection strings |
-| `service_start` / `service_stop` / `service_restart` | Bring services up/down (ports are pre-flighted — a started service binds the port tncli reports) |
+| `service_start` / `service_stop` / `service_restart` | Bring services up/down (ports are pre-flighted — a started service binds the port Pomelo reports) |
 | `service_logs` | Read a service's recent output (e.g. to spot a crash) |
 | `run_in_env` | Run a command in a worktree with the resolved env — migrations, tests, seeds — and read the result, verifying against the actual stack |
 | `resolve_port_conflict` | Self-heal: move the workspace to a clean port region when something else grabbed a port |
-| `config_get` / `config_validate` / `config_set` | Read and safely edit `tncli.yml` — every write is schema-validated before it lands, and new services get ports automatically |
+| `config_get` / `config_validate` / `config_set` | Read and safely edit `pom.yml` — every write is schema-validated before it lands, and new services get ports automatically |
 
 So mid-task you can say *"the migration failed — check the DB and rerun
 it"* or *"add a worker service and start it"*, and the agent uses these
 tools instead of guessing ports or hand-editing config. It talks to your
 already-running dashboard over loopback; nothing leaves your machine.
 
-`tncli mcp` is the underlying command; it's wired up automatically, so you
+`pom mcp` is the underlying command; it's wired up automatically, so you
 rarely run it yourself.
 
 ## Recovery
 
 Workspace metadata lives entirely on disk (`.tncli/network.json` per
 project, plus the `workspace--<branch>/` folders themselves) — so
-`tncli` can be killed and restarted without losing state. If you
-clobber the folder by hand, `tncli workspace list` will refuse to
+`pom` can be killed and restarted without losing state. If you
+clobber the folder by hand, `pom workspace list` will refuse to
 re-introduce stale port blocks.
 
 ## Tips
@@ -151,4 +151,4 @@ re-introduce stale port blocks.
   the tree stays scannable when you have many branches active. Expand a
   row to reopen it; the choice persists.
 - For a one-off check (e.g. before a PR) you don't need a workspace at
-  all — just create one ad-hoc and `tncli workspace delete` when done.
+  all — just create one ad-hoc and `pom workspace delete` when done.

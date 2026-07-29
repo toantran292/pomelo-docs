@@ -1,6 +1,6 @@
-# `tncli.yml` reference
+# `pom.yml` reference
 
-The project config. `tncli` walks up from the current directory looking
+The project config. `pom` walks up from the current directory looking
 for this file — keep it at the monorepo root.
 
 ## Top level
@@ -151,7 +151,7 @@ hard-code them.
 | `environment` | Container env vars. |
 | `volumes` | Volume mounts. |
 | `command` | Override container command. |
-| `healthcheck` | tncli waits for the healthcheck before marking the service ready. |
+| `healthcheck` | Pomelo waits for the healthcheck before marking the service ready. |
 | `db_user` / `db_password` | Credentials for auto database creation. |
 | `capacity` | Max slots per instance (auto-scales when exceeded). |
 

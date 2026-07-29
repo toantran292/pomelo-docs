@@ -1,7 +1,7 @@
 # The dashboard
 
-Running bare `tncli` opens a browser dashboard — the primary way to drive
-tncli day to day. It's a single-page app embedded in the binary (nothing
+Running bare `pom` opens a browser dashboard — the primary way to drive
+Pomelo day to day. It's a single-page app embedded in the binary (nothing
 to install or serve separately) that talks to the same tmux sessions,
 git worktrees, and services the CLI manages. This page is the conceptual
 tour; see [Architecture](./architecture) for how it's built.
@@ -49,12 +49,12 @@ To control the agent, right-click the **Claude Code** card in the overview
 
 The **Code** tab lists files changed on the branch vs its base as a
 collapsible directory tree (single-child folders compacted, VS Code
-style), with a side-by-side diff. It's read-only — tncli is for
+style), with a side-by-side diff. It's read-only — Pomelo is for
 orientation and quick review, not full editing.
 
 The **PRs** tab and the sidebar PR pill pull status straight from GitHub:
 per-branch checks, review state, and **mergeability** (can it merge, and
-if not, why — conflicts, behind base, blocked). tncli never merges for
+if not, why — conflicts, behind base, blocked). Pomelo never merges for
 you; it shows you where each PR stands and links out to GitHub for the
 rest. Check rows link to their logs. Status is fetched by exact head
 branch in batched GraphQL requests — complete and low-traffic (see
