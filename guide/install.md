@@ -133,3 +133,37 @@ The daemon checks for updates a couple of minutes after starting, then every
 few hours. When it finds a newer release it self-updates and the service
 manager relaunches it — so a machine left running stays current on its own.
 :::
+
+## Connect from another machine (thin client)
+
+Run Pomelo on one machine (a homelab box, say) and drive it from your laptop —
+the server does all the work; the laptop is just a window. Reach the server
+over your network; **Tailscale** is the easy way to get a stable private
+address.
+
+On the **server**, note its address + token:
+
+```bash
+pom web url          # prints the tokened URL (or use the daemon)
+```
+
+On the **client** (laptop), pair once:
+
+```bash
+pom connect my-server --token XXXX
+# or paste the URL from `pom web url`:
+pom connect 'http://my-server:8765/?token=XXXX'
+```
+
+Now bare `pom` on the laptop opens the **remote** dashboard through a local
+loopback proxy — so it behaves like a local one: it's on `127.0.0.1`, so the
+browser's clipboard works and there's no token in the URL, while the proxy
+injects the token and forwards everything to the server. Terminals, PRs,
+services — all the server's. Unpair with `pom disconnect` (bare `pom` then runs
+a local dashboard again).
+
+::: tip One server per project
+The client holds no state — it's a viewport. Keep one machine as the server
+for a given project (don't run two dashboards for the same project at once);
+your work lives there and in git.
+:::
