@@ -37,7 +37,7 @@ repos:
 ## 2. First-time setup
 
 ```bash
-tncli setup
+pom setup
 ```
 
 Installs prerequisites and shared service containers.
@@ -45,7 +45,7 @@ Installs prerequisites and shared service containers.
 ## 3. Create a workspace
 
 ```bash
-tncli workspace create feature-x
+pom workspace create feature-x
 ```
 
 Creates `workspace--feature-x/api/` as a git worktree on branch `feature-x`, runs `setup`, creates databases.
@@ -61,7 +61,7 @@ On your own machine `http://127.0.0.1:8765` just works — no token needed.
 are rejected outright.) To open the dashboard from **another device on
 your LAN**, use the printed LAN URL — it carries a one-time **access
 token** (`?token=…`) that authenticates that device; the browser stores it
-as a cookie after the first visit. Run `tncli web url` to print both URLs
+as a cookie after the first visit. Run `pom web url` to print both URLs
 again.
 
 From the dashboard you can start and stop services, watch live logs, and
