@@ -314,8 +314,8 @@ time.
 webhook:
   listen_port: 8766
   routes:
-    "/api": api              # → the "api" repo's service, in every workspace
-    "/comms": comm/server    # → a specific service: <alias>/<svc>
+    "/api": api              # → the "api" repo's sole service, in every workspace
+    "/hooks": web/server     # → a specific service: <alias>/<svc>
 ```
 
 How a request is handled:
