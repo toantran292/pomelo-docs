@@ -53,7 +53,7 @@ Creates `workspace--feature-x/api/` as a git worktree on branch `feature-x`, run
 ## 4. Open the dashboard
 
 ```bash
-tncli            # launches the web dashboard and opens your browser
+pom              # launches the web dashboard and opens your browser
 ```
 
 On your own machine `http://127.0.0.1:8765` just works — no token needed.

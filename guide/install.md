@@ -63,41 +63,48 @@ Verify the essentials are on your PATH:
 git --version && tmux -V && gh --version && claude --version
 ```
 
+::: tip Renamed from `tncli`
+The tool is now **Pomelo**, command **`pom`**. Already on `tncli`? Just run
+`tncli update` once — it lands you on Pomelo, adds the `pom` command (with a
+`tncli` compat symlink), and future updates flow automatically. Your
+`tncli.yml` keeps working; new projects can use `pom.yml`.
+:::
+
 ## Quick install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/toantran292/tncli-releases/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/toantran292/pomelo-releases/main/install.sh | bash
 ```
 
-This downloads the latest binary for your OS/arch to `~/.local/bin/tncli` and adds it to your PATH.
+This downloads the latest binary for your OS/arch to `~/.local/bin/pom` and adds it to your PATH.
 
 ## Manual install
 
-Download the binary for your platform from the [latest release](https://github.com/toantran292/tncli-releases/releases/latest):
+Download the binary for your platform from the [latest release](https://github.com/toantran292/pomelo-releases/releases/latest):
 
 | OS / Arch          | File                              |
 | ------------------ | --------------------------------- |
-| macOS Apple Silicon| `tncli-darwin-arm64.tar.gz`       |
-| macOS Intel        | `tncli-darwin-amd64.tar.gz`       |
-| Linux x86_64       | `tncli-linux-amd64.tar.gz`        |
-| Linux ARM64        | `tncli-linux-arm64.tar.gz`        |
+| macOS Apple Silicon| `pom-darwin-arm64.tar.gz`         |
+| macOS Intel        | `pom-darwin-amd64.tar.gz`         |
+| Linux x86_64       | `pom-linux-amd64.tar.gz`          |
+| Linux ARM64        | `pom-linux-arm64.tar.gz`          |
 
 ```bash
-tar xzf tncli-darwin-arm64.tar.gz
-mv tncli-darwin-arm64 ~/.local/bin/tncli
-chmod +x ~/.local/bin/tncli
+tar xzf pom-darwin-arm64.tar.gz
+mv pom-darwin-arm64 ~/.local/bin/pom
+chmod +x ~/.local/bin/pom
 ```
 
 ## Verify
 
 ```bash
-tncli version
+pom version
 ```
 
 ## Update
 
 ```bash
-tncli update
+pom update
 ```
 
 Fetches latest release and replaces the binary in place.
