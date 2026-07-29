@@ -20,7 +20,7 @@ Both front-ends call the same internal packages, so behaviour never
 drifts between them:
 
 ```
-CLI       cmd/tncli/*.go  ─┐
+CLI       cmd/pom/*.go  ─┐
                            ├─▶  internal/services  ─▶  internal/tmux  ─▶  tmux
 Web       internal/web    ─┘        (all side effects)          (subprocess)
                            └─▶  internal/pipeline (workspace lifecycle)
