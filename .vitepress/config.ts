@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'Pomelo',
   description: 'Workspace + service manager for dev (tmux + Docker + Git worktrees)',
-  base: '/tncli-docs/',
+  base: '/pomelo-docs/',
   cleanUrls: true,
   ignoreDeadLinks: true,
 
