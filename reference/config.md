@@ -7,14 +7,19 @@ a fallback, so existing projects keep working.)
 ## Splitting into multiple files
 
 When one file gets unwieldy, drop a `pom.d/` directory next to `pom.yml`.
-Every `pom.d/*.yml` (lexical order) is **deep-merged** into the root on load,
-so you can keep the shared bits in `pom.yml` and give each repo its own file:
+Every `pom.d/**/*.yml` (walked recursively, lexical order) is **deep-merged**
+into the root on load, so the root stays a small index and the bulk lives in
+fragments:
 
 ```
-pom.yml            # session, default_branch, jira, sync, shared_services, …
+pom.yml                    # session, default_branch, jira, sync — a tiny index
 pom.d/
-  api.yml          # { repos: { api: … } }
-  web.yml          # { repos: { web: … } }
+  environments.yml
+  presets.yml
+  shared-services.yml
+  repos/
+    01-api.yml             # { repos: { api: … } } — NN prefix keeps repo order
+    02-web.yml
 ```
 
 Maps merge by key (a fragment's repos add to the root's), existing keys keep
@@ -24,12 +29,15 @@ their order and new ones append — so port/ordering stays stable. A single
 To migrate an existing single file, run it once:
 
 ```bash
-pom config split              # repos → pom.d/<repo>.yml; tncli.yml → pom.yml
+pom config split              # repos → pom.d/repos/NN-<name>.yml; big sections
+                              # → pom.d/<section>.yml; tncli.yml → pom.yml
 pom config split --dry-run    # preview without writing
 ```
 
-It backs the original up as `<name>.bak` and keeps every non-repo section in
-the root untouched (comments ride along with each repo).
+It moves `repos`, `environments`, `presets` and `shared_services` into
+fragments, backs the original up as `<name>.bak`, and leaves the small stuff
+(session, defaults, jira, …) in the root. Comments ride along with each
+moved section.
 
 ::: tip Editing a split config
 Once split, the dashboard's Settings show the **merged (effective)** config
@@ -157,23 +165,36 @@ A file-specific value overrides `"*"`.
 
 ## Shared services
 
+**Well-known services ship with built-in defaults** — `postgres`, `redis`,
+`minio`, and `opensearch`. Just name the service and Pomelo fills in the
+image, ports, environment, volumes, healthcheck and credentials:
+
+```yaml
+shared_services:
+  postgres:                    # full postgres:16 config, filled in
+  redis:                       # redis:7-alpine + appendonly
+  minio:
+  opensearch:
+```
+
+Any field you set **overrides** the default (and `environment` maps merge):
+
 ```yaml
 shared_services:
   postgres:
-    image: postgres:16
-    ports: ["5432"]
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes: ["shared_postgres:/var/lib/postgresql/data"]
-    healthcheck:
-      test: pg_isready -U postgres -h 127.0.0.1
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    db_user: postgres
-    db_password: postgres
-    capacity: 16               # max slots per instance
+    image: postgres:15         # override just the version; the rest is default
+  cache:
+    type: redis                # a differently-named service picks a template via `type`
+    capacity: 32               # override one field
+```
+
+Spell out everything for a **custom** (non-well-known) service:
+
+```yaml
+shared_services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports: ["5672", "15672"]
 ```
 
 Host ports are dynamically allocated from the workspace pool; you never
@@ -189,6 +210,7 @@ hard-code them.
 | `healthcheck` | Pomelo waits for the healthcheck before marking the service ready. |
 | `db_user` / `db_password` | Credentials for auto database creation. |
 | `capacity` | Max slots per instance (auto-scales when exceeded). |
+| `type` | Well-known template to base this service on (defaults to the service's name). |
 
 ## Presets
 
