@@ -81,6 +81,14 @@ delete the **active** session — switch to another first.
   access open the dashboard on **`localhost`**.
 - Right-click → **Copy** works too, and keeps your selection.
 
+## Shift+Enter doesn't add a newline (Claude, etc.)
+
+It does now — press **Shift+Enter** in a terminal to insert a newline instead
+of submitting. A terminal can't normally tell Shift+Enter from Enter, so the
+dashboard intercepts it and sends the "meta-return" sequence (`ESC` + `CR`)
+that Claude Code and Codex read as *insert newline*. Plain **Enter** still
+submits.
+
 ## Selecting inside a fullscreen TUI (Claude, htop, …)
 
 A fullscreen TUI with mouse reporting owns the mouse — clicks, drags and

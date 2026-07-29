@@ -40,10 +40,11 @@ fragments, backs the original up as `<name>.bak`, and leaves the small stuff
 moved section.
 
 ::: tip Editing a split config
-Once split, the dashboard's Settings show the **merged (effective)** config
-**read-only** — edit the `pom.d/*.yml` files directly, then hit **Reload**.
-(Saving from the UI is disabled while split, so it can't re-inline the
-fragments back into the root.)
+The dashboard's **Settings → Raw YAML** is a multi-file editor: pick the root
+`pom.yml` or any `pom.d` fragment and save it individually — each save is
+validated against the full merged config before it lands. (The section *forms*
+show the merged config read-only while split, since they can't tell which file
+a field belongs to; use Raw YAML to edit.)
 :::
 
 ## Top level
