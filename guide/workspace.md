@@ -96,6 +96,34 @@ is bounded before it's sent, and if `claude` isn't available the collected
 context is still saved verbatim — you never end up with nothing.
 :::
 
+## Agent tools (MCP)
+
+A Claude Code session running in a workspace can't see its own environment
+by default — which port its dev server got, which database to migrate,
+whether a service is even up. tncli closes that gap: when it launches a
+Claude window it registers an **MCP server** scoped to that workspace, so
+the agent can inspect and act on the *real running stack* it lives in.
+
+The tools:
+
+| Tool | What the agent can do |
+| --- | --- |
+| `workspace_info` / `services` / `ports` | See the branch, its repos, and each service's running state + allocated port |
+| `databases` | Get ready-to-use per-branch Postgres connection strings |
+| `service_start` / `service_stop` / `service_restart` | Bring services up/down (ports are pre-flighted — a started service binds the port tncli reports) |
+| `service_logs` | Read a service's recent output (e.g. to spot a crash) |
+| `run_in_env` | Run a command in a worktree with the resolved env — migrations, tests, seeds — and read the result, verifying against the actual stack |
+| `resolve_port_conflict` | Self-heal: move the workspace to a clean port region when something else grabbed a port |
+| `config_get` / `config_validate` / `config_set` | Read and safely edit `tncli.yml` — every write is schema-validated before it lands, and new services get ports automatically |
+
+So mid-task you can say *"the migration failed — check the DB and rerun
+it"* or *"add a worker service and start it"*, and the agent uses these
+tools instead of guessing ports or hand-editing config. It talks to your
+already-running dashboard over loopback; nothing leaves your machine.
+
+`tncli mcp` is the underlying command; it's wired up automatically, so you
+rarely run it yourself.
+
 ## Recovery
 
 Workspace metadata lives entirely on disk (`.tncli/network.json` per
