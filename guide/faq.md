@@ -96,6 +96,29 @@ service a stable offset, persisted in `.tncli/network.json`. Ports are
 **reproducible** across restarts. See
 [Architecture › Port management](./architecture#port-management).
 
+## I deleted a workspace folder by hand and now create fails
+
+Deleting a `workspace--…/<repo>` folder with `rm -rf` (instead of the
+Delete action) leaves git with a stale worktree registration, so creating
+that branch again fails with *"'…' is already used by worktree at …"*.
+tncli now **prunes stale registrations automatically** before adding a
+worktree, so a retry usually just works. If you're on an older build or a
+folder is only half-removed, clear it manually from any worktree of that
+repo:
+
+```bash
+cd ~/…/workspace--main/<repo>     # any worktree of the same repo
+git worktree prune                # drop entries whose folder is gone
+git worktree list                 # confirm the stale one disappeared
+# still stuck? force it, then prune:
+git worktree remove --force <the-path-in-the-error>
+git worktree prune
+```
+
+Prefer the **Delete workspace** action (or `tncli workspace delete`) — it
+removes worktrees, databases and port leases together, so nothing goes
+stale.
+
 ## Shared services (Postgres/Redis/…) aren't running
 
 They need **docker**. You don't have to start them manually — starting a
