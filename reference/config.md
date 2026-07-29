@@ -1,7 +1,42 @@
 # `pom.yml` reference
 
 The project config. `pom` walks up from the current directory looking
-for this file — keep it at the monorepo root.
+for this file — keep it at the monorepo root. (`tncli.yml` is still read as
+a fallback, so existing projects keep working.)
+
+## Splitting into multiple files
+
+When one file gets unwieldy, drop a `pom.d/` directory next to `pom.yml`.
+Every `pom.d/*.yml` (lexical order) is **deep-merged** into the root on load,
+so you can keep the shared bits in `pom.yml` and give each repo its own file:
+
+```
+pom.yml            # session, default_branch, jira, sync, shared_services, …
+pom.d/
+  api.yml          # { repos: { api: … } }
+  web.yml          # { repos: { web: … } }
+```
+
+Maps merge by key (a fragment's repos add to the root's), existing keys keep
+their order and new ones append — so port/ordering stays stable. A single
+`pom.yml` with no `pom.d/` works exactly as before.
+
+To migrate an existing single file, run it once:
+
+```bash
+pom config split              # repos → pom.d/<repo>.yml; tncli.yml → pom.yml
+pom config split --dry-run    # preview without writing
+```
+
+It backs the original up as `<name>.bak` and keeps every non-repo section in
+the root untouched (comments ride along with each repo).
+
+::: tip Editing a split config
+Once split, the dashboard's Settings show the **merged (effective)** config
+**read-only** — edit the `pom.d/*.yml` files directly, then hit **Reload**.
+(Saving from the UI is disabled while split, so it can't re-inline the
+fragments back into the root.)
+:::
 
 ## Top level
 
