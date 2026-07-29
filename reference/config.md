@@ -301,3 +301,40 @@ list, open a PR, or trigger CI. It's created without touching your `HEAD` or
 staging area, and an unchanged tree never churns a new push. Toggle it under
 **Settings → Jira → Sync**. Runs server-side, so it keeps working with no
 browser open (e.g. under the [daemon](../guide/install#run-at-login-daemon)).
+
+## Webhook fan-out
+
+Optional. Runs a **single-port** relay that receives external webhooks and
+**duplicates** each to every workspace running the target service — so all
+your parallel branches receive the same event (each has its own database, so
+processing is independent). No more re-pointing a tunnel at one branch at a
+time.
+
+```yaml
+webhook:
+  listen_port: 8766
+  routes:
+    "/api": api              # → the "api" repo's service, in every workspace
+    "/comms": comm/server    # → a specific service: <alias>/<svc>
+```
+
+How a request is handled:
+
+1. The relay matches the request path against `routes` by **longest prefix**
+   (`/api/webhooks/stripe` → `/api`).
+2. The prefix is **stripped**, so the app receives `/webhooks/stripe` — define
+   your route without the prefix. Query string, headers (including the
+   provider's **signature**) and the raw body are forwarded unchanged.
+3. It resolves that service's port in **every leased workspace** and forwards
+   to the ones currently listening; stopped workspaces are skipped.
+4. It **ACKs `200` immediately**, then fans out in the background — one slow or
+   down branch never makes the provider retry.
+
+A route target is a repo **alias** (uses that repo's sole service) or
+`alias/svc` to pick one. Runs server-side (works under the
+[daemon](../guide/install#run-at-login-daemon)), bound to loopback.
+
+**Cloudflare Tunnel setup:** point **one** public hostname's Service URL at
+`http://localhost:8766` and leave **Path** empty — the relay does the
+per-service routing. (A tunnel Service URL is `scheme://host:port` only; it
+can't contain a path.)
