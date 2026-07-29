@@ -61,7 +61,7 @@ See [Databases](../guide/databases).
 ## Web companion
 
 ```bash
-Pomelo                          # launch the web companion (default)
+pom                            # launch the web companion (default)
 pom web [--host H] [--port P]  # explicit bind (default 0.0.0.0:8765)
 ```
 
@@ -69,6 +69,19 @@ The web companion serves a browser dashboard: manage services, watch
 live logs, and shell into any tmux pane via xterm.js. It attaches to the
 service tmux session over WebSocket, so state survives closing the
 browser tab.
+
+## Background service (daemon)
+
+```bash
+pom daemon install [--port P]  # install + start the login service
+pom daemon status              # installed / running / serving
+pom daemon logs                # recent daemon output
+pom daemon uninstall           # stop + remove it
+pom daemon run [--host H] [--port P]  # foreground worker (run by the service)
+```
+
+Runs the dashboard at login and auto-updates itself. launchd on macOS,
+systemd user service on Linux. See [Run at login](../guide/install#run-at-login-daemon).
 
 ## Run & inspect
 

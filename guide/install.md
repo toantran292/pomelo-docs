@@ -108,3 +108,28 @@ pom update
 ```
 
 Fetches latest release and replaces the binary in place.
+
+## Run at login (daemon)
+
+Don't want to keep a terminal open? Install Pomelo as a background service
+that starts at login and **keeps itself updated** — it periodically checks
+for a new release, updates in place, and restarts on the new binary.
+
+```bash
+pom daemon install     # install + start the login service
+pom daemon status      # installed / running / serving
+pom daemon logs        # recent daemon output
+pom daemon uninstall   # stop + remove it
+```
+
+On macOS this is a launchd agent (`~/Library/LaunchAgents/com.pomelo.daemon.plist`);
+on Linux a systemd user service (`systemctl --user … pomelo`). The dashboard
+comes up on `http://127.0.0.1:8765` (pass `--port` to `install` to change it),
+serving your last-used session. `pom daemon run` is the foreground worker the
+service launches — you rarely run it yourself.
+
+::: tip Auto-update cadence
+The daemon checks for updates a couple of minutes after starting, then every
+few hours. When it finds a newer release it self-updates and the service
+manager relaunches it — so a machine left running stays current on its own.
+:::
