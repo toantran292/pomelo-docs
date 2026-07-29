@@ -203,3 +203,18 @@ Create a token at **id.atlassian.com → Security → API tokens**, then
 field is required and becomes the branch prefix (ticket `FEAT-123` +
 description "add login" → branch `feat-123-add-login`), so the chip resolves
 automatically.
+
+## Archive
+
+Optional. Controls the workspace → Markdown retrospective feature.
+
+```yaml
+archive:
+  auto_on_merge: true      # default false
+```
+
+`auto_on_merge` makes Pomelo archive a workspace automatically once its
+pull request merges (and no PR on that workspace is still open). Detection
+runs in the server-side PR loop, so it works even with no browser open.
+**Off by default** because generating an archive runs your `claude` CLI and
+spends tokens. See [Workspace › Auto-archive on PR merge](../guide/workspace#auto-archive-on-pr-merge).

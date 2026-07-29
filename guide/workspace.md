@@ -92,6 +92,25 @@ pom archive show <branch>     # print one
 pom archive path              # print the archive directory
 ```
 
+### Auto-archive on PR merge
+
+Turn it on and you never have to remember: once a workspace's pull
+request **merges** (and no PR on that workspace is still open), Pomelo
+archives it automatically. Detection runs server-side in the PR watch
+loop, so it fires **even with no browser open** — as long as `pom` (or the
+[daemon](./install#run-at-login-daemon)) is running. Each branch archives
+at most once.
+
+Enable it in **Settings → Jira → Archive**, or in `pom.yml`:
+
+```yaml
+archive:
+  auto_on_merge: true
+```
+
+It's **off by default**: generating an archive runs your `claude` CLI and
+spends tokens, so Pomelo won't do it behind your back until you opt in.
+
 ### Recalling archives from a Claude session
 
 You don't have to remember any of this while working. When Pomelo launches
