@@ -6,8 +6,21 @@ a git worktree per repo, with its own ports, env, and databases.
 
 ## Create
 
-From the web UI: use the create-workspace control, type the branch name,
-and pick the repos.
+From the web UI: use the create-workspace control, enter a Jira ticket
+and/or a description (they form the branch), and pick the repos.
+
+### Create & assign to agent
+
+Leave **“Start Claude on this ticket after creating”** ticked (the default)
+and the button becomes **Create & assign**: once the workspace is built —
+worktrees, per-branch databases, ports, env all provisioned — tncli opens
+a Claude session in it that's **already primed with the ticket** (its
+summary and description are injected into the session's context) and wired
+to the [MCP tools](#agent-tools-mcp). You review and say "go" — the agent
+starts with full context and can inspect ports, run migrations/tests
+against the real stack, and open a PR. Any Claude session in a
+ticket-prefixed workspace gets this ticket context automatically, button or
+not.
 
 From the CLI:
 
