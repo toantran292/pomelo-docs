@@ -312,11 +312,17 @@ time.
 
 ```yaml
 webhook:
-  listen_port: 8766
+  # listen_port: 8766       # optional — defaults to the dashboard port + 1
   routes:
     "/api": api              # → the "api" repo's sole service, in every workspace
     "/hooks": web/server     # → a specific service: <alias>/<svc>
 ```
+
+The relay is a **control port** like the dashboard's — not a workspace-pool
+port. It defaults to the dashboard port **+ 1** (so `pom web --port 9000` puts
+the relay on `9001`); set `listen_port` only if you want a fixed number. Like
+the dashboard, there's one relay per running server and it follows whichever
+session is active.
 
 How a request is handled:
 
