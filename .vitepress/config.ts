@@ -7,6 +7,14 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
 
+  // head hrefs are NOT auto-prefixed with `base` (unlike themeConfig.logo),
+  // so the site base is spelled out here.
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/pomelo-docs/logo.svg' }],
+    ['link', { rel: 'icon', href: '/pomelo-docs/favicon.ico', sizes: 'any' }],
+    ['link', { rel: 'apple-touch-icon', href: '/pomelo-docs/icon-192.png' }],
+  ],
+
   // Pomelo docs are full of `{{var:NAME}}` / `{{db:name}}` templates. Inside
   // code, Vue's template tokenizer still scans `{{ }}` (even under v-pre)
   // and errors on the `:` (reads it as a TS annotation). Rather than change
@@ -25,6 +33,7 @@ export default defineConfig({
   },
 
   themeConfig: {
+    logo: '/logo.svg',
     nav: [
       { text: 'Guide', link: '/guide/install' },
       { text: 'Reference', link: '/reference/config' },
