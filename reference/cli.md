@@ -93,6 +93,7 @@ pom disconnect                      # unpair
 pom takeover                        # make this machine primary (pull latest + go local)
 pom handback                        # push all work so another machine can take over
 pom release [--disk] [--worktrees]  # free local footprint (services/containers/disk)
+pom relocate <ssh-host>             # preflight a server + plan migrating this project to it
 ```
 
 Pairs this machine with a remote server; bare `pom` then proxies its dashboard

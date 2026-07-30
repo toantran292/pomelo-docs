@@ -141,6 +141,21 @@ the server does all the work; the laptop is just a window. Reach the server
 over your network; **Tailscale** is the easy way to get a stable private
 address.
 
+### Moving an existing project to a server
+
+Everything currently on your laptop? Check a server's readiness and get a
+copy-paste migration plan:
+
+```bash
+pom relocate my-server      # SSH preflight + plan
+```
+
+It reports what the server is missing — **relocate never copies secrets**:
+GitHub auth (`gh auth login`), an SSH key for git, and Claude auth + your
+`~/.claude` skills are per-machine and must be set up **on the server**;
+relocate just tells you which. The movable parts (code via git, `.env` files,
+archives) it lists exact commands for. Then `pom connect` from the laptop.
+
 On the **server**, note its address + token:
 
 ```bash
