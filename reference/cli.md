@@ -16,6 +16,7 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 
 ```bash
 pom setup                    # one-time: /etc/hosts + global gitignore
+pom doctor                   # check tools, services & config; point at fixes
 pom update                   # download + install the latest release
 pom update --rollback        # restore the previous binary (undo last update)
 ```
