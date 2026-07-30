@@ -162,6 +162,12 @@ injects the token and forwards everything to the server. Terminals, PRs,
 services — all the server's. Unpair with `pom disconnect` (bare `pom` then runs
 a local dashboard again).
 
+It also **forwards each workspace's service ports** to the same ports on the
+laptop, so an app's baked `http://127.0.0.1:<port>` URLs (and its API calls)
+resolve to the real service on the server — you open the dev app in your
+laptop browser exactly as if it ran locally. New services are picked up
+automatically.
+
 ::: tip One server per project
 The client holds no state — it's a viewport. Keep one machine as the server
 for a given project (don't run two dashboards for the same project at once);
