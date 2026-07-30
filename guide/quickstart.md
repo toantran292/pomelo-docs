@@ -16,6 +16,13 @@ a `pom.yml` with a runnable service, and carries your uncommitted changes — yo
 original repo is untouched. Add more repos, databases and env as you go, or
 start from the full config below. Run `pom doctor` any time to check your setup.
 
+Want a repo to try it on? Clone the example:
+
+```bash
+git clone https://github.com/toantran292/pomelo-example
+cd pomelo-example && pom init
+```
+
 ## 1. Or write `pom.yml` by hand
 
 In your monorepo root:

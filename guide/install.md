@@ -42,6 +42,13 @@ sudo pacman -S git tmux zsh github-cli
 npm install -g @anthropic-ai/claude-code   # optional
 ```
 
+### Windows (WSL2)
+
+Pomelo is a Unix tool (it drives tmux and a zsh login shell). On Windows, run
+it inside **WSL2** — install a distro (e.g. Ubuntu), then follow the Debian /
+Ubuntu steps above **inside** WSL. Open the dashboard from the Windows browser
+at the WSL address it prints; everything else works as on Linux.
+
 Official install pages if a package is missing or you want another method:
 [git](https://git-scm.com/downloads) ·
 [tmux](https://github.com/tmux/tmux/wiki/Installing) ·
@@ -72,11 +79,20 @@ The tool is now **Pomelo**, command **`pom`**. Already on `tncli`? Just run
 
 ## Quick install
 
+**Homebrew** (macOS / Linux):
+
+```bash
+brew install toantran292/pomelo/pomelo
+```
+
+Or the install script (downloads the latest binary to `~/.local/bin/pom` and
+adds it to your PATH):
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/toantran292/pomelo-releases/main/install.sh | bash
 ```
 
-This downloads the latest binary for your OS/arch to `~/.local/bin/pom` and adds it to your PATH.
+Then check your setup with `pom doctor`.
 
 ## Manual install
 
