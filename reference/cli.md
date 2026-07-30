@@ -90,6 +90,9 @@ pom connect <host|url> [--token T]  # pair with a remote pom server
 pom                                 # (when paired) open the remote dashboard locally
 pom server <command...>             # run a pom command on the paired server
 pom disconnect                      # unpair
+pom takeover                        # make this machine primary (pull latest + go local)
+pom handback                        # push all work so another machine can take over
+pom release [--disk] [--worktrees]  # free local footprint (services/containers/disk)
 ```
 
 Pairs this machine with a remote server; bare `pom` then proxies its dashboard

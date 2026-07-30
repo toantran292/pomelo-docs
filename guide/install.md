@@ -184,3 +184,31 @@ The client holds no state — it's a viewport. Keep one machine as the server
 for a given project (don't run two dashboards for the same project at once);
 your work lives there and in git.
 :::
+
+### Failover & reclaiming
+
+If the server gets slow or goes down (bad network, power cut), take over on a
+machine that has the project checked out:
+
+```bash
+pom takeover     # fetch latest + restore in-progress work, unpair, go local
+pom              # now a local dashboard
+```
+
+`takeover` fast-forwards each branch from `origin` and — onto a **clean** tree
+— restores the other machine's uncommitted work from its
+[`sync.auto_push`](../reference/config#sync) snapshot (`refs/pom-wip`), so you
+lose at most the last few minutes. Before leaving a machine, push everything so
+another can pick up:
+
+```bash
+pom handback     # push commits + a WIP snapshot for every worktree
+```
+
+When you go back to driving the server and want the laptop light again:
+
+```bash
+pom release                 # stop local services + remove shared containers
+pom release --disk          # also drop docker volumes (reclaim disk)
+pom release --worktrees     # also delete branch workspaces (keeps main)
+```
