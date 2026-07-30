@@ -168,6 +168,17 @@ resolve to the real service on the server — you open the dev app in your
 laptop browser exactly as if it ran locally. New services are picked up
 automatically.
 
+Run any pom command **on the server** from the laptop with `pom server`:
+
+```bash
+pom server workspace list
+pom server start api
+pom server workspace create FEAT-1 add-login
+```
+
+It runs the command on the server (in its project) and prints the output
+here — so you manage everything from the client without SSHing in.
+
 ::: tip One server per project
 The client holds no state — it's a viewport. Keep one machine as the server
 for a given project (don't run two dashboards for the same project at once);

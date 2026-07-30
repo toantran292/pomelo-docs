@@ -83,6 +83,19 @@ pom daemon run [--host H] [--port P]  # foreground worker (run by the service)
 Runs the dashboard at login and auto-updates itself. launchd on macOS,
 systemd user service on Linux. See [Run at login](../guide/install#run-at-login-daemon).
 
+## Remote (thin client)
+
+```bash
+pom connect <host|url> [--token T]  # pair with a remote pom server
+pom                                 # (when paired) open the remote dashboard locally
+pom server <command...>             # run a pom command on the paired server
+pom disconnect                      # unpair
+```
+
+Pairs this machine with a remote server; bare `pom` then proxies its dashboard
+to `127.0.0.1` and forwards service ports. See
+[Connect from another machine](../guide/install#connect-from-another-machine-thin-client).
+
 ## Run & inspect
 
 ```bash
