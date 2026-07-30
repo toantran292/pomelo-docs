@@ -286,3 +286,28 @@ coherent:
 - **`sudo` is confined to `pom setup`.** Every runtime command —
   `start`, `workspace create`, `proxy` — runs without elevated
   privileges.
+
+## Remote, sync & the webhook relay
+
+Pomelo can run headless on a server and be driven from a laptop — all built on
+the same stateless server, no separate protocol:
+
+- **Daemon.** `pom daemon` runs the dashboard as a launchd/systemd service and
+  self-updates on a timer (smoke-testing the new binary before it goes live;
+  `pom update --rollback` reverts).
+- **Thin client.** `pom connect` stores a link; bare `pom` then runs a local
+  reverse proxy that injects the token and keeps the browser's `localhost`
+  Host (so the same-origin check passes with no token in the URL), and
+  TCP-forwards each workspace's service ports 1:1 so baked `127.0.0.1:<port>`
+  URLs resolve. `pom server <cmd>` runs a command on the server via an audited
+  `/api/exec`.
+- **Active push & failover.** With `sync.auto_push`, the server loop pushes
+  branch commits plus an uncommitted-tree snapshot to `refs/pom-wip/<branch>`
+  (a non-branch ref, GC'd hourly). `pom takeover` fast-forwards and restores
+  that snapshot onto a clean tree; `pom handback` pushes it.
+- **Webhook relay.** One loopback port fronts all workspaces: path prefixes
+  fan out to every workspace (webhooks), while `host_routes`/`state_routes`
+  proxy synchronously to a single workspace (OAuth callbacks — routed by Host
+  or the `state` param so one allowlisted URL serves every branch). Any tunnel
+  (Tailscale Funnel, ngrok, cloudflared, a reverse proxy) points at it — the
+  relay is vendor-neutral.
