@@ -23,6 +23,12 @@ git clone https://github.com/toantran292/pomelo-example
 cd pomelo-example && pom init
 ```
 
+For a non-trivial project (multiple services, databases, env), add `--claude`:
+`pom init --claude` scaffolds the basics, then hands off to an **interactive
+`claude` session** that reads your repo and asks you about services, ports,
+databases and env before writing a tailored `pom.yml` — it asks rather than
+guesses. (Requires the `claude` CLI.)
+
 ## 1. Or write `pom.yml` by hand
 
 In your monorepo root:
