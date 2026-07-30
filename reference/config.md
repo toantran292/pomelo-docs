@@ -298,9 +298,10 @@ When on, the server periodically (per branch worktree):
 
 `refs/pom-wip/*` is a **non-branch ref**: it doesn't appear in the branch
 list, open a PR, or trigger CI. It's created without touching your `HEAD` or
-staging area, and an unchanged tree never churns a new push. Toggle it under
-**Settings → Jira → Sync**. Runs server-side, so it keeps working with no
-browser open (e.g. under the [daemon](../guide/install#run-at-login-daemon)).
+staging area, and an unchanged tree never churns a new push. Stale snapshot
+refs (branches whose workspace was deleted) are **garbage-collected hourly**.
+Toggle it under **Settings → Jira → Sync**. Runs server-side, so it keeps
+working with no browser open (e.g. under the [daemon](../guide/install#run-at-login-daemon)).
 
 ## Webhook fan-out
 
