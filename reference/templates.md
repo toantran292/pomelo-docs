@@ -23,6 +23,7 @@ silently at runtime.
 | `{{bind_ip}}` | Always `127.0.0.1` | `127.0.0.1` |
 | `{{branch}}` | Raw workspace branch name | `feat/login` |
 | `{{branch_safe}}` | Branch with `/`→`_`, `-`→`_` (safe for DB names) | `feat_login` |
+| `{{branch_host}}` | Branch as a DNS label (lowercase, only `a-z0-9-`) — for per-workspace hostnames / OAuth `state` | `feat-login` |
 
 ## Variables: `{{var:NAME}}`
 

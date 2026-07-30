@@ -61,6 +61,13 @@ export default defineConfig({
           ]
         },
         {
+          text: 'Remote & integrations',
+          items: [
+            { text: 'Remote & failover', link: '/guide/remote' },
+            { text: 'Webhooks & OAuth', link: '/guide/webhooks' }
+          ]
+        },
+        {
           text: 'Help',
           items: [
             { text: 'FAQ & troubleshooting', link: '/guide/faq' }
