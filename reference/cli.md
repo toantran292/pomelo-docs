@@ -16,7 +16,6 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 
 ```bash
 pom setup                    # one-time: /etc/hosts + global gitignore
-pom migrate                  # migrate from older state layouts
 pom update                   # download + install the latest release
 ```
 
@@ -26,10 +25,12 @@ pom update                   # download + install the latest release
 ## Workspaces
 
 ```bash
-pom workspace create <combo> <branch>
+pom workspace create <combo> <branch>   # alias: pom ws create …
 pom workspace delete <branch>
 pom workspace list
 ```
+
+`workspace` has the short alias **`ws`** (e.g. `pom ws list`).
 
 See [Workspace lifecycle](../guide/workspace).
 
@@ -40,7 +41,6 @@ pom start  <service|combo>
 pom stop  [service|combo]    # no arg → stop everything
 pom restart <service|combo>
 pom status                   # running services with PIDs
-pom list                     # services + workspaces summary
 pom logs <service>           # recent output snapshot
 pom attach [service]         # attach tmux session/window
 ```
@@ -105,7 +105,6 @@ to `127.0.0.1` and forwards service ports. See
 ```bash
 pom run <service> <cmd...>   # run a one-off command in a service's env
 pom disk                     # report disk usage of worktrees + volumes
-pom agent                    # AI code-agent integration
 ```
 
 ## Misc
