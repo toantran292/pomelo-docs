@@ -341,6 +341,32 @@ A route target is a repo **alias** (uses that repo's sole service) or
 `alias/svc` to pick one. Runs server-side (works under the
 [daemon](../guide/install#run-at-login-daemon)), bound to loopback.
 
+### OAuth callbacks — per-workspace, not fan-out
+
+A **webhook** (a Stripe event) is safe to fan out. An **OAuth callback**
+(`…/auth/callback?code=…`) is not: the `code` is single-use and must return to
+the exact workspace that started the flow. For those, give each workspace its
+own hostname with `host_routes`:
+
+```yaml
+webhook:
+  host_routes:
+    "portal.example.com": portal/api   # <branch>.portal.example.com → that ONE workspace
+```
+
+`<branch>.portal.example.com` routes to **only** that workspace's service and
+returns its real response (the redirect). Point a Cloudflare **wildcard**
+(`*.portal.example.com`) at the relay, and give each workspace its own callback
+URL via the `{{branch_host}}` template (a DNS-safe branch label):
+
+```yaml
+env:
+  NYLAS_CALLBACK_URI: "https://{{branch_host}}.portal.example.com/portal/v1/nylas/auth/callback"
+```
+
+So workspace `crm-855` uses `crm-855.portal.example.com`, the provider sends
+the callback back to it, and the relay delivers it there — no fan-out.
+
 **Cloudflare Tunnel setup:** point **one** public hostname's Service URL at
 `http://localhost:8766` and leave **Path** empty — the relay does the
 per-service routing. (A tunnel Service URL is `scheme://host:port` only; it
