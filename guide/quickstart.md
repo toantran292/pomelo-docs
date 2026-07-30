@@ -1,6 +1,22 @@
 # Quick Start
 
-## 1. Create `pom.yml`
+## The fastest start: `pom init`
+
+In an existing git repo, let Pomelo scaffold a project for you:
+
+```bash
+cd my-app
+pom init            # clones this repo into a new project + writes a working pom.yml
+cd ~/pom/my-app     # the path it prints
+pom                 # opens the dashboard
+```
+
+`pom init` detects your stack (npm/pnpm/yarn, Rails, Django, Go, Rust…), writes
+a `pom.yml` with a runnable service, and carries your uncommitted changes — your
+original repo is untouched. Add more repos, databases and env as you go, or
+start from the full config below. Run `pom doctor` any time to check your setup.
+
+## 1. Or write `pom.yml` by hand
 
 In your monorepo root:
 

@@ -15,6 +15,7 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 ## Project lifecycle
 
 ```bash
+pom init [name]              # scaffold a project from the git repo you're in
 pom setup                    # one-time: /etc/hosts + global gitignore
 pom doctor                   # check tools, services & config; point at fixes
 pom update                   # download + install the latest release
