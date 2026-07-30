@@ -341,31 +341,51 @@ A route target is a repo **alias** (uses that repo's sole service) or
 `alias/svc` to pick one. Runs server-side (works under the
 [daemon](../guide/install#run-at-login-daemon)), bound to loopback.
 
-### OAuth callbacks — per-workspace, not fan-out
+### OAuth callbacks — one URL, routed by `state`
 
 A **webhook** (a Stripe event) is safe to fan out. An **OAuth callback**
 (`…/auth/callback?code=…`) is not: the `code` is single-use and must return to
-the exact workspace that started the flow. For those, give each workspace its
-own hostname with `host_routes`:
+the exact workspace that started the flow. And OAuth providers require the
+redirect URI to be **allowlisted exactly** (no wildcards) — so a per-branch
+hostname means adding every branch to the provider, forever.
+
+The fix: allowlist **one** callback URL and route by the OAuth `state` param
+(which the provider echoes back). The workspace prefixes `state` with
+`pom~<branch>~`:
+
+```yaml
+webhook:
+  state_routes:
+    "/portal/v1/nylas/auth/callback": portal/api   # → the workspace named in ?state=
+```
+
+The app builds `state` from the `{{branch_host}}` template, so each workspace
+identifies itself:
+
+```yaml
+env:
+  # the app appends its own CSRF: state = "pom~{{branch_host}}~" + csrf
+  POM_OAUTH_STATE_PREFIX: "pom~{{branch_host}}~"
+```
+
+So `crm-855` sends `state=pom~crm-855~…`; the callback hits the single
+allowlisted URL; the relay reads `state`, forwards **only** to `crm-855`, and
+returns its real response (the redirect). New branches need **no** provider
+change.
+
+#### `host_routes` (subdomain) — only for wildcard-friendly cases
+
+If a service is reachable at a fixed/wildcard hostname (not gated by OAuth
+allowlisting), route by Host instead:
 
 ```yaml
 webhook:
   host_routes:
     "portal.example.com": portal/api   # <branch>.portal.example.com → that ONE workspace
 ```
-
-`<branch>.portal.example.com` routes to **only** that workspace's service and
-returns its real response (the redirect). Point a Cloudflare **wildcard**
-(`*.portal.example.com`) at the relay, and give each workspace its own callback
-URL via the `{{branch_host}}` template (a DNS-safe branch label):
-
-```yaml
-env:
-  NYLAS_CALLBACK_URI: "https://{{branch_host}}.portal.example.com/portal/v1/nylas/auth/callback"
-```
-
-So workspace `crm-855` uses `crm-855.portal.example.com`, the provider sends
-the callback back to it, and the relay delivers it there — no fan-out.
+with a Cloudflare **wildcard** `*.portal.example.com` and per-workspace URLs
+via `{{branch_host}}`. For OAuth providers that demand exact redirect URIs,
+prefer `state_routes` above.
 
 **Cloudflare Tunnel setup:** point **one** public hostname's Service URL at
 `http://localhost:8766` and leave **Path** empty — the relay does the
