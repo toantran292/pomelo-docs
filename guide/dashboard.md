@@ -109,6 +109,32 @@ databases), you can open several branches side by side and compare them
 live. Cards needing attention (an agent awaiting input) float to the
 top; click any card to dive into that workspace.
 
+## Settings — read-first, three ways to edit
+
+Settings is a **read-first** surface: each section (General, Environments,
+Presets, Repos, Shared services, Ports) is a calm, typographic view of the
+*effective* config — no dense input farms. Config-dense sections lay out as a
+**horizontal board of fixed-width columns** (one per repo / environment /
+preset / workspace) with edge fades that show when there's more to scroll;
+values render with `{{var}}` templates highlighted, and zero-values stay hidden.
+
+Every section offers **three ways to change the config**:
+
+| Path | What it does |
+| :-- | :-- |
+| **Edit** | Opens the *exact* fragment that defines this section (a single `pom.d/**` file — resolved automatically, so it works with a [split config](/reference/config#splitting-into-multiple-files)) in a YAML editor. Saving **validates the whole merged config** before it lands, then reloads. |
+| **Edit with Claude** | Opens the config assistant, seeded for that section — describe the change in plain language and it edits the right fragment over the [pom MCP](./workspace#agent-tools-mcp), validated. |
+| **Raw YAML** | The full multi-file editor for hand-editing any fragment. |
+
+Shared services keep their **runtime controls** (start / stop / restart / logs
+per container, plus start-all / tear-down) alongside the read-only config.
+
+::: tip Per-workspace config assistant
+Right-click a workspace in the sidebar → **Fix config with Claude** to open a
+dedicated Claude scoped to *that* workspace's worktree and branch — it fixes
+that workspace's setup/env/config in isolation.
+:::
+
 ## Install as an app
 
 The dashboard is a PWA: in Chrome/Edge/Arc/Dia use the address-bar
@@ -122,7 +148,10 @@ local server underneath, so nothing else changes.
 
 The dashboard ships **three themes** — dark, light, and sepia — switchable
 in Settings. Every surface is driven by semantic CSS variables, so themes
-stay consistent everywhere (including the code viewer and PR panels).
-Interactions use a single Apple-style easing curve with subtle press and
-state transitions; if your OS is set to minimize motion, the dashboard
-honors it and collapses animation.
+stay consistent everywhere (including the code viewer and PR panels). Light
+and dark follow **Apple system colors** (systemBlue accent, grouped
+backgrounds, HIG label opacities, elevated surfaces); sepia is a warm
+parchment for long sessions. Interactions use Apple-style easing — a gentle
+spring for menus and modals, snappy press feedback, a focus ring for keyboard
+users; if your OS is set to minimize motion, the dashboard honors it and
+collapses animation.

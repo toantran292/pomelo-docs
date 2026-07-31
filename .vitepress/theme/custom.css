@@ -1,99 +1,95 @@
 /*
- * tncli docs theme — mirrors the dashboard's color language so the docs
- * and the app read as one product. Palette lifted verbatim from the web
- * UI's semantic CSS variables (web-ui/src/styles.css): near-black glass
- * background, a light-blue accent that fades into the workspace purple,
- * and the same ok/warn/danger triad.
+ * Pomelo docs theme — mirrors the dashboard's Apple-style color language so the
+ * docs and the app read as one product. Palette from the web UI's semantic
+ * tokens (web-ui/src/styles/00-tokens.css): Apple system colors — systemBlue
+ * accent, grouped backgrounds, HIG label opacities, ok/warn/danger triad.
+ * Light uses #f2f2f7 + white cards; dark uses #000 with elevated #1c1c1e.
  */
 
 :root {
-  /* Brand = the app accent blue. */
-  --vp-c-brand-1: #3a8fe0;
-  --vp-c-brand-2: #2f7fd6;
-  --vp-c-brand-3: #1565c0;
-  --vp-c-brand-soft: rgba(47, 127, 214, 0.12);
+  --vp-c-brand-1: #007aff;
+  --vp-c-brand-2: #0060df;
+  --vp-c-brand-3: #0a84ff;
+  --vp-c-brand-soft: rgba(0, 122, 255, 0.10);
 
   --vp-c-tip-1: var(--vp-c-brand-1);
   --vp-c-tip-soft: var(--vp-c-brand-soft);
   --vp-c-note-1: var(--vp-c-brand-1);
 
-  /* State colors — same triad as the dashboard. */
-  --vp-c-success-1: #2e9d62;
-  --vp-c-success-soft: rgba(46, 157, 98, 0.13);
-  --vp-c-warning-1: #c4761b;
-  --vp-c-warning-soft: rgba(196, 118, 27, 0.10);
-  --vp-c-danger-1: #d83a3a;
-  --vp-c-danger-soft: rgba(216, 58, 58, 0.10);
+  --vp-c-bg: #f2f2f7;
+  --vp-c-bg-alt: #ffffff;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #ffffff;
+  --vp-c-border: rgba(60, 60, 67, 0.20);
+  --vp-c-divider: rgba(60, 60, 67, 0.12);
+  --vp-c-text-1: #000000;
+  --vp-c-text-2: rgba(60, 60, 67, 0.72);
+  --vp-c-text-3: rgba(60, 60, 67, 0.45);
 
-  /* Hero wordmark: blue → workspace purple, the app's identity gradient. */
+  --vp-c-success-1: #34c759;
+  --vp-c-success-soft: rgba(52, 199, 89, 0.14);
+  --vp-c-warning-1: #ff9500;
+  --vp-c-warning-soft: rgba(255, 149, 0, 0.12);
+  --vp-c-danger-1: #ff3b30;
+  --vp-c-danger-soft: rgba(255, 59, 48, 0.10);
+
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #2f7fd6 20%, #8657d2);
+  --vp-home-hero-name-background: linear-gradient(120deg, #007aff 20%, #af52de);
 
   --vp-code-tab-active-bar-color: var(--vp-c-brand-1);
-  --tncli-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --pom-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --vp-border-radius: 12px;
 }
 
-/* ── Dark = the dashboard's default look ─────────────────────────────── */
 .dark {
-  --vp-c-bg: #090b0e;
-  --vp-c-bg-alt: #0c0f13;
-  --vp-c-bg-elv: #12151b;
-  --vp-c-bg-soft: #12151b;
+  --vp-c-bg: #000000;
+  --vp-c-bg-alt: #1c1c1e;
+  --vp-c-bg-elv: #1c1c1e;
+  --vp-c-bg-soft: #1c1c1e;
 
-  --vp-c-border: rgba(255, 255, 255, 0.09);
-  --vp-c-divider: rgba(255, 255, 255, 0.06);
-  --vp-c-gutter: #05070a;
+  --vp-c-border: rgba(255, 255, 255, 0.13);
+  --vp-c-divider: rgba(255, 255, 255, 0.08);
+  --vp-c-gutter: #000000;
 
-  --vp-c-text-1: #e9edf2;
-  --vp-c-text-2: #9aa3ad;
-  --vp-c-text-3: #6b7480;
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: rgba(235, 235, 245, 0.60);
+  --vp-c-text-3: rgba(235, 235, 245, 0.40);
 
-  /* Accent brightens in dark to match the app's #7fc8ff. */
-  --vp-c-brand-1: #7fc8ff;
-  --vp-c-brand-2: #a9d6ff;
-  --vp-c-brand-3: #5aa9ef;
-  --vp-c-brand-soft: rgba(124, 200, 255, 0.12);
+  --vp-c-brand-1: #0a84ff;
+  --vp-c-brand-2: #409cff;
+  --vp-c-brand-3: #0a84ff;
+  --vp-c-brand-soft: rgba(10, 132, 255, 0.16);
 
   --vp-c-success-1: #30d158;
-  --vp-c-success-soft: rgba(48, 209, 88, 0.13);
+  --vp-c-success-soft: rgba(48, 209, 88, 0.15);
   --vp-c-warning-1: #ff9f0a;
-  --vp-c-warning-soft: rgba(255, 159, 10, 0.13);
+  --vp-c-warning-soft: rgba(255, 159, 10, 0.15);
   --vp-c-danger-1: #ff453a;
-  --vp-c-danger-soft: rgba(255, 69, 58, 0.13);
+  --vp-c-danger-soft: rgba(255, 69, 58, 0.16);
 
-  --vp-home-hero-name-background: linear-gradient(120deg, #7fc8ff 20%, #c8aaff);
+  --vp-home-hero-name-background: linear-gradient(120deg, #0a84ff 20%, #bf5af2);
 
-  /* Brand button: dark text on the light-blue accent, like the app. */
-  --vp-button-brand-text: #06121f;
-  --vp-button-brand-hover-text: #06121f;
-  --vp-button-brand-active-text: #06121f;
-  --vp-button-brand-bg: #7fc8ff;
-  --vp-button-brand-hover-bg: #a9d6ff;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-active-text: #ffffff;
+  --vp-button-brand-bg: #0a84ff;
+  --vp-button-brand-hover-bg: #409cff;
   --vp-button-brand-border: transparent;
 
-  --vp-code-block-bg: #0a0c10;
+  --vp-code-block-bg: #000000;
 }
 
-/* Subtle glass on the nav bar, like the dashboard topbar. */
-.dark .VPNav {
-  backdrop-filter: saturate(1.2) blur(12px);
-}
+.VPNav { backdrop-filter: saturate(1.8) blur(20px); }
 
-/* Monospace everywhere code shows — matches the terminal font in-app. */
-:root {
-  --vp-font-family-mono: var(--tncli-mono);
-}
+:root { --vp-font-family-mono: var(--pom-mono); }
+.vp-doc :not(pre) > code { font-size: 0.85em; }
 
-/* Inline template tokens ({{var:NAME}} etc.) read as accents, not noise. */
-.vp-doc :not(pre) > code {
-  font-size: 0.85em;
+.VPFeature {
+  border-radius: 14px;
+  transition: border-color 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-/* Tighten the feature cards on the home page toward the app's card feel. */
-.dark .VPFeature {
-  background: #0f1319;
-  border-color: rgba(255, 255, 255, 0.07);
-}
-.dark .VPFeature:hover {
-  border-color: rgba(124, 200, 255, 0.26);
-}
+.VPFeature:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10); }
+.dark .VPFeature { background: #1c1c1e; border-color: rgba(255, 255, 255, 0.10); }
+.dark .VPFeature:hover { border-color: rgba(10, 132, 255, 0.34); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); }
