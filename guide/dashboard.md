@@ -45,6 +45,25 @@ a notification center record these events.
 To control the agent, right-click the **Claude Code** card in the overview
 (or the **Claude** pill in the header) → **Restart** or **Stop**.
 
+### The Claude chat view
+
+A Claude tab opens as a **structured chat** (toggle to **Raw** for a full
+xterm mirror when you need slash commands or plan-mode keystrokes). The chat
+view mirrors the CLI in real time:
+
+- **Live status** while the agent works — a spinner pill with the elapsed
+  time and token count, plus a **Stop** button to interrupt the turn — and a
+  streaming preview of the reply as it's typed, before it lands in the
+  transcript.
+- **Usage** in the header: context used, session cost, and the 5-hour / 7-day
+  rate-limit windows.
+- **Model & mode pickers** that reflect the agent's *actual* state (including
+  auto/yolo) and relaunch it when changed.
+- **Interactive prompts** — permission requests and numbered menus become
+  real buttons (single-select, multi-select, or "type your own answer").
+- **Rich messages** — pasted code and large blocks collapse to a chip you
+  click to view; images preview inline.
+
 ## Reviewing code
 
 The **Code** tab lists files changed on the branch vs its base as a

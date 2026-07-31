@@ -144,17 +144,32 @@ The tools:
 | `databases` | Get ready-to-use per-branch Postgres connection strings |
 | `service_start` / `service_stop` / `service_restart` | Bring services up/down (ports are pre-flighted — a started service binds the port Pomelo reports) |
 | `service_logs` | Read a service's recent output (e.g. to spot a crash) |
-| `run_in_env` | Run a command in a worktree with the resolved env — migrations, tests, seeds — and read the result, verifying against the actual stack |
+| `commands` | List the project's **pre-written** `setup` steps and `shortcuts` (description → command, preset-resolved) plus its package manager (`local_pm`) — so the agent runs *your* canonical install/migrate/lint/test commands instead of guessing |
+| `run_shortcut` | Run one of those shortcuts by description, in the repo's resolved env |
+| `run_in_env` | Run an arbitrary command in a worktree with the resolved env — migrations, tests, seeds — and read the result, verifying against the actual stack (also honors `local_pm`, so a hand-written `npm install` becomes `pnpm install`) |
 | `resolve_port_conflict` | Self-heal: move the workspace to a clean port region when something else grabbed a port |
 | `config_get` / `config_validate` / `config_set` | Read and safely edit `pom.yml` — every write is schema-validated before it lands, and new services get ports automatically |
+| `config_files` / `config_file_get` / `config_file_set` | Edit a **split** config: list and edit the individual `pom.d/**` fragments, validated in the full merged context |
+| `migrate_config` | Migrate a legacy `tncli.yml` to `pom.yml` |
 
 So mid-task you can say *"the migration failed — check the DB and rerun
 it"* or *"add a worker service and start it"*, and the agent uses these
-tools instead of guessing ports or hand-editing config. It talks to your
-already-running dashboard over loopback; nothing leaves your machine.
+tools instead of guessing ports or hand-editing config. It reads your
+`shortcuts`/`setup` first, so an agent runs your exact `db:migrate` recipe
+(or `pnpm install`, honoring `local_pm`) rather than inventing one. It talks
+to your already-running dashboard over loopback; nothing leaves your machine.
 
-`pom mcp` is the underlying command; it's wired up automatically, so you
-rarely run it yourself.
+`pom mcp` is the underlying command; it's wired up automatically (registered
+as the `pom` MCP server), so you rarely run it yourself.
+
+### Setup assistant
+
+The dashboard's **Settings → Setup assistant** button launches a *dedicated*
+Claude — separate from any workspace agent — whose only job is to get your
+project running: it reads the real state over these MCP tools (ports, DBs,
+service logs, config), diagnoses what's broken or misconfigured, and fixes
+it by editing the right `pom.d` fragment (validated) or running the
+project's own setup steps. You watch in the chat view and reload to apply.
 
 ## Recovery
 
