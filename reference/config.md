@@ -391,3 +391,57 @@ prefer `state_routes` above.
 `http://localhost:8766` and leave **Path** empty — the relay does the
 per-service routing. (A tunnel Service URL is `scheme://host:port` only; it
 can't contain a path.)
+
+## Dev proxy (same-origin URLs, no CORS)
+
+Optional. Instead of remembering `127.0.0.1:40002` per service, browse each
+workspace at a **hostname** — and, crucially, put a frontend and the backends
+it calls **under one origin** so the browser makes same-origin requests: **no
+CORS, and cookies behave like production**. `<branch>.localhost` auto-resolves
+to loopback (no `/etc/hosts`). One control port (default dashboard **+ 2**,
+i.e. `8767`) fronts everything; the underlying per-service ports stay allocated
+as usual — the proxy just hides them behind hostnames.
+
+**Single-frontend app** — `<branch>.<domain>`, path-routed:
+
+```yaml
+proxy:
+  # listen_port: 8767      # optional
+  # domain: localhost      # optional; <branch>.<domain>
+  paths:
+    "/be/api": api          # <branch>.localhost:8767/be/api → the api service
+    "/": web                # everything else → the web (frontend) service
+```
+
+**Multiple frontends (a mesh)** — one origin per frontend, `<app>.<branch>.<domain>`:
+
+```yaml
+proxy:
+  apps:
+    client: { frontend: client, backends: { "/be/api": api, "/be/comm": comm } }
+    admin:  { frontend: admin,  backends: { "/be/api": api } }
+```
+
+so `client.crm-855.localhost:8767/` serves the client app and
+`client.crm-855.localhost:8767/be/api/…` hits the api service — same origin.
+Set each frontend's API base to the same-origin path (Pomelo controls env, so
+no frontend code changes):
+
+```yaml
+env:
+  NEXT_PUBLIC_API_URL: "http://client.{{branch_host}}.localhost:8767/be/api"
+```
+
+::: warning Server-side frontends (Next.js): don't reuse `/api`
+The frontend is the **default** — every path that doesn't match a backend
+prefix goes to it, including a Next.js app's own `/api/*` routes, `/_next/*`
+and server actions. So route backends under a **distinct** prefix (e.g.
+`/be/api`), **never** `/api` or `/_next`, or you'll hijack the framework's own
+server-side routes.
+:::
+
+The proxy binds **both** `127.0.0.1` and `::1` (macOS resolves `*.localhost`
+to `::1` first). Because only this one port needs to be reachable, it also
+works from a Windows browser into **WSL** via localhost forwarding — no need to
+forward every service port. For clients that don't special-case `.localhost`,
+set `domain: localtest.me` (a public wildcard → `127.0.0.1`, zero setup).
