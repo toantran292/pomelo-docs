@@ -24,7 +24,7 @@ repos:
 
 | Field | Notes |
 | --- | --- |
-| `cmd` | The shell line to run. `$PORT` is auto-substituted with the allocated port when `port: true`. |
+| `cmd` | The shell line to run. With `port: true`, `$PORT` (the allocated port) and `$BIND_IP` (the address to listen on) are exported. Servers that default to localhost-only (vite) should pass `--host $BIND_IP`; 0.0.0.0 binders (puma, next) need nothing. |
 | `port: true` | Request a port from the workspace's port block. The number is stable across restarts. |
 | `exposes` | Variable name(s) this service publishes — its local URL becomes the value of `{{var:NAME}}`. Scalar or list. |
 | `environments` | Profiles offered for this service (overrides the repo-level list). Empty = inherit. |
@@ -48,7 +48,7 @@ repos:
     environments: [local, staging]      # profiles offered here
     services:
       app:
-        cmd: vite --port $PORT
+        cmd: vite --port $PORT --host $BIND_IP
         port: true
         env:
           VITE_API: "{{var:API_URL}}"   # local URL, or staging override

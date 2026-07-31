@@ -74,6 +74,22 @@ Redis, …) are up. Ports are shown per service and are stable across
 restarts. Keyboard: arrow keys move focus, Enter starts/stops, `r`
 restarts, `o` opens in the browser, `/` opens quick-launch.
 
+On a service card, the **↗ button opens the app in the browser** — via its
+[dev-proxy](../reference/config#dev-proxy-same-origin-urls-no-cors) URL
+when the proxy is running, else the raw port. Clicking the card **body**
+(the live output preview) attaches the terminal; the header never does,
+so clicking a chip or port can't open a tab by accident.
+
+## Board view
+
+The **▦ toggle** in the topbar switches to a board of every workspace as
+a card: agent state orb, services running, uncommitted count, worst PR
+state, Jira chip — and one **↗ open button per running web service**.
+Because every workspace is a real, isolated environment (own ports, own
+databases), you can open several branches side by side and compare them
+live. Cards needing attention (an agent awaiting input) float to the
+top; click any card to dive into that workspace.
+
 ## Install as an app
 
 The dashboard is a PWA: in Chrome/Edge/Arc/Dia use the address-bar

@@ -20,7 +20,7 @@ silently at runtime.
 | `{{conn:NAME}}` | `user:pass@host:port` from shared service creds | `postgres:postgres@localhost:44800` |
 | `{{db:NAME}}` | Named database (session-prefixed, branch-resolved) | `myproject_feat_login` |
 | `{{slot:NAME}}` | Allocated slot index for capacity-limited services | `3` |
-| `{{bind_ip}}` | Always `127.0.0.1` | `127.0.0.1` |
+| `{{bind_ip}}` | Service bind address — the dedicated IP when enabled (`pom setup`), else `127.0.0.1` | `127.0.0.2` |
 | `{{branch}}` | Raw workspace branch name | `feat/login` |
 | `{{branch_safe}}` | Branch with `/`→`_`, `-`→`_` (safe for DB names) | `feat_login` |
 | `{{branch_host}}` | Branch as a DNS label (lowercase, only `a-z0-9-`) — for per-workspace hostnames / OAuth `state` | `feat-login` |

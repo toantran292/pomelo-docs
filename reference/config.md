@@ -368,8 +368,8 @@ env:
   POM_OAUTH_STATE_PREFIX: "pom~{{branch_host}}~"
 ```
 
-So `crm-855` sends `state=pom~crm-855~…`; the callback hits the single
-allowlisted URL; the relay reads `state`, forwards **only** to `crm-855`, and
+So `feat-login` sends `state=pom~feat-login~…`; the callback hits the single
+allowlisted URL; the relay reads `state`, forwards **only** to `feat-login`, and
 returns its real response (the redirect). New branches need **no** provider
 change.
 
@@ -422,8 +422,8 @@ proxy:
     admin:  { frontend: admin,  backends: { "/be/api": api } }
 ```
 
-so `client.crm-855.localhost:8767/` serves the client app and
-`client.crm-855.localhost:8767/be/api/…` hits the api service — same origin.
+so `client.feat-login.localhost:8767/` serves the client app and
+`client.feat-login.localhost:8767/be/api/…` hits the api service — same origin.
 Set each frontend's API base to the same-origin path (Pomelo controls env, so
 no frontend code changes):
 
@@ -439,6 +439,10 @@ and server actions. So route backends under a **distinct** prefix (e.g.
 `/be/api`), **never** `/api` or `/_next`, or you'll hijack the framework's own
 server-side routes.
 :::
+
+The dashboard's **Open in browser** / **Copy URL** actions prefer these
+proxy URLs automatically whenever the proxy is listening — the raw
+`ip:port` form is only the fallback.
 
 The proxy binds **both** `127.0.0.1` and `::1` (macOS resolves `*.localhost`
 to `::1` first). Because only this one port needs to be reachable, it also

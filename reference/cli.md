@@ -17,14 +17,31 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 ```bash
 pom init [name]              # scaffold a project from the git repo you're in
 pom init --claude            # then let claude tailor pom.yml with you (interactive)
-pom setup                    # one-time: /etc/hosts + global gitignore
+pom setup                    # one-time: dedicated service IP + global gitignore
 pom doctor                   # check tools, services & config; point at fixes
 pom update                   # download + install the latest release
 pom update --rollback        # restore the previous binary (undo last update)
 ```
 
-`setup` is the only command that asks for `sudo` (to edit
-`/etc/hosts`). Everything else runs unprivileged.
+`setup` runs from anywhere (no project needed) and is the only command
+that may ask for `sudo` — on macOS it adds the `127.0.0.2` loopback alias
+and a LaunchDaemon that restores it after reboot; Linux has the whole
+loopback range available already. Everything else runs unprivileged.
+
+## Network
+
+```bash
+pom network plan             # show current vs target port layout (read-only)
+pom network reflow           # force re-adaptation now (only while idle)
+pom network bind-ip          # show the dedicated service IP status
+pom network bind-ip 127.0.0.2   # enable it (or `off` to disable)
+```
+
+You normally never need these: the port layout **adapts to your config
+automatically** — block size and shared reserve derive from your service
+counts, and resizing happens only while nothing is running, so a port
+never moves under a live service. `plan` exists for transparency,
+`reflow` to force the resize immediately.
 
 ## Workspaces
 

@@ -51,9 +51,19 @@ Ports are the classic source of "works on my machine" collisions. Pomelo
 removes the guesswork with a **deterministic, layered allocation** that is
 persisted so a service keeps the same port across restarts.
 
-- **The pool** is divided into fixed-size **blocks** (100 ports each). A
-  workspace leases one block; every `port: true` service in that
-  workspace draws a stable offset inside it.
+- **A dedicated IP (optional, recommended).** `pom setup` gives services
+  their own loopback IP (`127.0.0.2`) so no port can ever collide with
+  other software on the machine, and the pool widens to `10000–49999`.
+  Shared docker services stay on `127.0.0.1` (database clients keep
+  working unchanged). Without it, everything runs on `127.0.0.1` with the
+  classic `40000–49999` pool — if the IP can't be bound, Pomelo falls
+  back automatically.
+- **The pool** is divided into **blocks** — one per workspace; every
+  `port: true` service draws a stable offset inside its block. Block size
+  is **not fixed**: it adapts to your config (service count plus a small
+  margin, rounded), and re-adapts when the config changes — but only
+  while nothing is running, so a port never moves under a live service.
+  While something runs the layout can only grow, never shift.
 - **Stable indices** live in `.tncli/network.json` per project:
 
   ```json
@@ -71,11 +81,11 @@ persisted so a service keeps the same port across restarts.
   ports are **reproducible** — restart a service and it lands on the same
   port every time.
 - **Session slots** (`~/.local/state/pom/slots.json`) assign a global slot per
-  session so two sessions on the same machine never overlap on ports. The
-  pool divides into `max_sessions` equal slots (subnet-style) —
-  configurable in Settings › **Pomelo (global) › Sessions & slots**
-  (`~/.local/state/pom/config.json`, machine-wide, not per-session); slot size and
-  workspaces-per-session are derived from it. A session is assigned its
+  session so two sessions on the same machine never overlap on ports.
+  `max_sessions` — how many projects may run at once — is the **only
+  knob** (Settings › **Pomelo (global) › Sessions & slots**, stored in
+  `~/.local/state/pom/config.json`, machine-wide); slot size and
+  workspaces-per-session derive from it and the config automatically. A session is assigned its
   slot **the first time it starts a service** and **keeps it until the
   session is deleted** — `slots.json` is the single authority for
   session→slot, so ports stay stable across restarts and can never collide.
