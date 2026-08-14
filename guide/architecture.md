@@ -36,7 +36,7 @@ A workspace is not a copy — it is one **git worktree per repo**, checked
 out on the workspace's branch, living under `workspace--<branch>/`.
 Worktrees share the object store with the main clone, so creating a
 workspace is cheap in disk and instant to switch. Each workspace gets its
-own env files, database names, and port block, so any number can run at
+own env files, database names, and ports, so any number can run at
 once without collision.
 
 ::: tip Workspace branch vs git branch
@@ -48,64 +48,31 @@ branch was later renamed. This keeps a workspace's identity stable.
 ## Port management
 
 Ports are the classic source of "works on my machine" collisions. Pomelo
-removes the guesswork with a **deterministic, layered allocation** that is
-persisted so a service keeps the same port across restarts.
+sidesteps them: you never address a service by port — the
+[dev proxy](../reference/config#dev-proxy) gives every app a stable domain
+and resolves the current port for you — so the port itself is just an
+internal detail that can be handed out freely.
 
-- **A dedicated IP (optional, recommended).** `pom setup` gives services
-  their own loopback IP (`127.0.0.2`) so no port can ever collide with
-  other software on the machine, and the pool widens to `10000–49999`.
-  Shared docker services stay on `127.0.0.1` (database clients keep
-  working unchanged). Without it, everything runs on `127.0.0.1` with the
-  classic `40000–49999` pool — if the IP can't be bound, Pomelo falls
-  back automatically.
-- **The pool** is divided into **blocks** — one per workspace; every
-  `port: true` service draws a stable offset inside its block. Block size
-  is **not fixed**: it adapts to your config (service count plus a small
-  margin, rounded), and re-adapts when the config changes — but only
-  while nothing is running, so a port never moves under a live service.
-  While something runs the layout can only grow, never shift.
-- **Stable indices** live in `.tncli/network.json` per project:
-
-  ```json
-  {
-    "slot": 0,
-    "blocks":      { "ws-feature-x": 3 },
-    "service_map": { "api/web": 1, "api/worker": 2 },
-    "shared_map":  { "redis": 0, "postgres": 1 }
-  }
-  ```
-
-  `blocks` maps a workspace to its port block; `service_map` fixes each
-  service's offset within the block; `shared_map` fixes each shared
-  service's offset from the shared base. Because the maps are persisted,
-  ports are **reproducible** — restart a service and it lands on the same
-  port every time.
-- **Session slots** (`~/.local/state/pom/slots.json`) assign a global slot per
-  session so two sessions on the same machine never overlap on ports.
-  `max_sessions` — how many projects may run at once — is the **only
-  knob** (Settings › **Pomelo (global) › Sessions & slots**, stored in
-  `~/.local/state/pom/config.json`, machine-wide); slot size and
-  workspaces-per-session derive from it and the config automatically. A session is assigned its
-  slot **the first time it starts a service** and **keeps it until the
-  session is deleted** — `slots.json` is the single authority for
-  session→slot, so ports stay stable across restarts and can never collide.
-  When every slot is assigned, the session switcher warns and starting a
-  port-consuming service in an unassigned session is hard-blocked (rather
-  than binding against a bogus slot and dying). To free a slot without
-  deleting the session, use **Release slot** (the ✕ on a session's slot tag,
-  or its right-click menu). As a safety measure this first **stops all of
-  that session's services and its shared stack** (so the ports are actually
-  freed and the next session to claim the slot can't collide) — agents like
-  Claude, which hold no port, keep running. The session keeps its files and
-  re-claims a slot the next time it starts a service. Each session runs its
-  own
-  shared-service stack on its slot's
-  ports, generated on demand — so two sessions each get an isolated
-  Postgres/Redis without a port clash.
-
-All reads and writes go through a **file lock** (`WithProjectLock`), so
-concurrent workspace operations can't corrupt the map with a
-read-modify-write race.
+- **Random, on demand.** Every `port: true` service gets a **random free
+  port** from `10000–65535` on `127.0.0.1`, probed against the OS and
+  reserved **atomically** by creating `ports.d/<port>` with `O_EXCL` — the
+  filesystem's atomic create is the cross-process uniqueness guarantee, so
+  any number of workspaces or sessions coexist without a shared lock or a
+  pre-carved pool. No dedicated IP, no slots, no blocks to size.
+- **Sticky while it runs, freed when it dies.** A service keeps its port
+  for its lifetime; when it stops listening (crash, quit, force-quit) the
+  port is released and the row removed. On restart it may get a fresh port
+  — harmless, because the proxy re-resolves it. Shared services (Postgres,
+  Redis, …) get their sticky port up front so connection strings stay
+  stable.
+- **A single-writer registry.** One goroutine owns the lease table and
+  serves every claim/release through a channel (race-free by construction);
+  readers — the proxy on every request — read a lock-free atomic snapshot.
+  Durable state is the `~/.local/state/pom/ports.d/` directory (one file per
+  port). Lifecycle: `assigned` → `starting` → `running`; a background reaper
+  drives it from the port's own liveness, independent of tmux.
+- **Observe it** with [`pom ports`](../reference/cli#ports) (add `--watch`
+  to see ports claimed and freed live).
 
 Templates surface the resolved values so config never hardcodes a port:
 

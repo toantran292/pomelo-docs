@@ -443,7 +443,7 @@ server-side routes.
 The dashboard's **Open in browser** / **Copy URL** actions prefer these
 proxy URLs automatically whenever the proxy is listening — the raw
 `ip:port` form is only the fallback. So if **Open** hands you a raw
-`127.0.0.2:port` (and an app that expects same-origin backends 404s), the
+`127.0.0.1:port` (and an app that expects same-origin backends 404s), the
 proxy isn't running: the config has no `proxy:` block, or it was added while
 `pom` was already up. The proxy starts automatically when configured — at
 launch and again after any config **Reload** — so add the block, reload (or

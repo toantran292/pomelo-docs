@@ -17,31 +17,29 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 ```bash
 pom init [name]              # scaffold a project from the git repo you're in
 pom init --claude            # then let claude tailor pom.yml with you (interactive)
-pom setup                    # one-time: dedicated service IP + global gitignore
+pom setup                    # one-time: global gitignore
 pom doctor                   # check tools, services & config; point at fixes
 pom update                   # download + install the latest release
 pom update --rollback        # restore the previous binary (undo last update)
 ```
 
-`setup` runs from anywhere (no project needed) and is the only command
-that may ask for `sudo` — on macOS it adds the `127.0.0.2` loopback alias
-and a LaunchDaemon that restores it after reboot; Linux has the whole
-loopback range available already. Everything else runs unprivileged.
+`setup` runs from anywhere (no project needed) and needs **no `sudo`** — ports
+are allocated dynamically on `127.0.0.1`, so there's no loopback alias to
+provision. Every command runs unprivileged.
 
-## Network
+## Ports
 
 ```bash
-pom network plan             # show current vs target port layout (read-only)
-pom network reflow           # force re-adaptation now (only while idle)
-pom network bind-ip          # show the dedicated service IP status
-pom network bind-ip 127.0.0.2   # enable it (or `off` to disable)
+pom ports                    # live port registry: each service's port + state
+pom ports --watch            # refresh in place (watch ports get claimed/freed)
 ```
 
-You normally never need these: the port layout **adapts to your config
-automatically** — block size and shared reserve derive from your service
-counts, and resizing happens only while nothing is running, so a port
-never moves under a live service. `plan` exists for transparency,
-`reflow` to force the resize immediately.
+Each service gets a **random free port** (10000–65535 on `127.0.0.1`), reserved
+atomically and sticky while it runs; when it stops the port is freed. You never
+address services by port anyway — the [dev proxy](../reference/config#dev-proxy)
+serves a stable domain and resolves the current port for you. `pom ports` shows
+each lease and where it is in its lifecycle (`assigned` → `starting` →
+`running`).
 
 ## Workspaces
 
