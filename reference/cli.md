@@ -95,12 +95,16 @@ browser tab.
 pom daemon install [--port P]  # install + start the login service
 pom daemon status              # installed / running / serving
 pom daemon logs                # recent daemon output
+pom daemon restart             # bounce the service (apply a manual `pom update` now)
 pom daemon uninstall           # stop + remove it
 pom daemon run [--host H] [--port P]  # foreground worker (run by the service)
 ```
 
-Runs the dashboard at login and auto-updates itself. launchd on macOS,
-systemd user service on Linux. See [Run at login](../guide/install#run-at-login-daemon).
+Runs the dashboard at login and auto-updates itself (checks `pomelo-releases`
+every 6h, updates in place and relaunches on the new binary). launchd on macOS,
+systemd user service on Linux. To apply an update immediately instead of
+waiting: `pom update` then `pom daemon restart`. See
+[Run at login](../guide/install#run-at-login-daemon).
 
 ## Remote (thin client)
 
