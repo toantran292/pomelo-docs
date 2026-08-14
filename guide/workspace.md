@@ -162,6 +162,23 @@ to your already-running dashboard over loopback; nothing leaves your machine.
 `pom mcp` is the underlying command; it's wired up automatically (registered
 as the `pom` MCP server), so you rarely run it yourself.
 
+### Multi-repo workspace map
+
+A workspace with more than one repo is a *virtual monorepo*: the workspace
+root is the parent of every repo's worktree, and Claude runs rooted there so
+it can read across all of them. To keep that cheap, Pomelo writes a concise
+`CLAUDE.md` **at the workspace root** — generated from your config — that lists
+each repo (alias, folder, services, exposed variables, databases, environments)
+and the dev-proxy topology, plus the working rules *"read across repos freely,
+but scope each change to one repo / one PR"* and *"only open the repos this task
+touches."* This is the org-level layer of Claude Code's layered-`CLAUDE.md`
+pattern; each repo keeps its own `CLAUDE.md` for repo-specific conventions.
+
+It's facts-only (no invented descriptions), regenerated on every Claude launch
+so it tracks your config, written **only** when a workspace has more than one
+repo, and never overwrites a hand-written root `CLAUDE.md` — Pomelo only
+rewrites the file it generated (tagged with a `pom:workspace-map` marker).
+
 ### Setup assistant
 
 The dashboard's **Settings → Setup assistant** button launches a *dedicated*

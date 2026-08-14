@@ -208,7 +208,12 @@ stays responsive:
 
 - **Realtime agent state over SSE.** Claude/agent state (idle, working,
   awaiting input) is pushed to the browser over Server-Sent Events, so
-  notifications are instant instead of polled.
+  notifications are instant instead of polled. The state comes from Claude
+  Code's own **lifecycle hooks** — when Pomelo opens an interactive Claude in
+  a terminal it attaches a per-session settings file whose hooks report
+  transitions (prompt submitted, tool run, turn finished, awaiting input) back
+  to the dashboard over loopback. No terminal scraping, and it never touches
+  your global Claude settings (the file is merged for that session only).
 - **Batched PR fetch.** Pull-request status is fetched by **exact head
   branch** — one aliased GraphQL query per on-screen (repo, branch),
   batched into a few requests — rather than one `gh` call per repo. This
