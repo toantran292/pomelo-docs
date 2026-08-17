@@ -228,19 +228,29 @@ shared_services:
   opensearch:
 ```
 
-Pomelo **SSH-forwards** each shared service to `127.0.0.1:<its pom port>`, so
-`{{conn:*}}` (always localhost) and any local tool — **DataGrip**, `psql` — reach
-the remote instance with no change. If the box is **unreachable** at startup,
-Pomelo falls back to **local docker**, so coding never stalls (dev data is
-disposable — nothing is synced back).
+When `shared_upstream` is set, each shared service gets a **fixed local port**
+(deterministic, `20000–29999`, never changes across restarts). Pomelo
+SSH-forwards that fixed port to the box's actual (random) port — discovered
+over the same SSH connection, so you never configure or even know the remote
+port. `{{conn:*}}` and any local tool — **DataGrip**, `psql` — use the fixed
+`localhost:<port>` and are configured **once**. If the box is **unreachable** at
+startup, Pomelo falls back to **local docker** on the same fixed ports, so
+coding never stalls (dev data is disposable — nothing is synced back).
+
+Find a service's stable address to paste into DataGrip:
+
+```bash
+pom url boom postgres     # postgresql://postgres:postgres@localhost:20132
+```
 
 ::: tip Set-up
-- The box **runs Pomelo** managing the same session's shared services (any
-  ports — they're random and that's fine). Pomelo on the laptop asks it
-  (`pom url <session> <service>`) and forwards each; you never configure or even
-  know the remote ports. Everything tunnels through the **one SSH connection**.
-- **SSH-only** by design; auth resolves via `~/.ssh/config`. A background daemon
-  needs the key to work non-interactively (agent, or a passphrase-less key).
+- The box **runs Pomelo** serving the same session's shared services (any ports).
+  Auth is **SSH-only**, via `~/.ssh/config` (a `Host` alias is easiest); a
+  background daemon needs the key to work non-interactively (ssh-agent, or a
+  passphrase-less key).
+- The `.localhost` domain is only a label — TCP can't be routed by name (no
+  Host header like HTTP), so the **fixed port** is what makes it stable; the
+  address is just `localhost:<port>`.
 - Bonus: an always-on box makes standing up a real OpenSearch for
   [e2e tests](../guide/services) trivial, off the laptop's RAM.
 :::
