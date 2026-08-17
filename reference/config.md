@@ -213,6 +213,37 @@ hard-code them.
 | `capacity` | Max slots per instance (auto-scales when exceeded). |
 | `type` | Well-known template to base this service on (defaults to the service's name). |
 
+### Run shared services on another box — `shared_upstream`
+
+A local Docker Desktop VM just to run postgres/redis/minio/opensearch is heavy.
+Point Pomelo at a small always-on Linux box (a mini-PC, a homelab node) over
+SSH and run them there instead — your app stays **native** on the laptop:
+
+```yaml
+shared_upstream: ssh://user@mini-pc     # an ~/.ssh/config Host alias is easiest
+shared_services:
+  postgres:
+  redis:
+  minio:
+  opensearch:
+```
+
+Pomelo **SSH-forwards** each shared service to `127.0.0.1:<its pom port>`, so
+`{{conn:*}}` (always localhost) and any local tool — **DataGrip**, `psql` — reach
+the remote instance with no change. If the box is **unreachable** at startup,
+Pomelo falls back to **local docker**, so coding never stalls (dev data is
+disposable — nothing is synced back).
+
+::: tip Set-up
+- On the box, run the shared services on their **standard ports** (postgres
+  `5432`, redis `6379`, minio `9000`, opensearch `9200`) — e.g. a docker-compose
+  with `restart: unless-stopped`. Pomelo forwards to those.
+- **SSH-only** by design; auth resolves via `~/.ssh/config`. A background daemon
+  needs the key to work non-interactively (agent, or a passphrase-less key).
+- Bonus: an always-on box makes standing up a real OpenSearch for
+  [e2e tests](../guide/services) trivial, off the laptop's RAM.
+:::
+
 ## Presets
 
 Reusable repo fragments:
