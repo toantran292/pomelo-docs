@@ -109,7 +109,8 @@ waiting: `pom update` then `pom daemon restart`. See
 ## Remote (thin client)
 
 ```bash
-pom connect <host|url> [--token T]  # pair with a remote pom server
+pom connect <host|url> [--token T]  # pair over HTTP (needs the dashboard port reachable)
+pom connect ssh://user@host [-i K]  # pair over SSH — only needs :22 open, no token
 pom                                 # (when paired) open the remote dashboard locally
 pom server <command...>             # run a pom command on the paired server
 pom disconnect                      # unpair
@@ -120,8 +121,11 @@ pom relocate <ssh-host>             # preflight a server + plan migrating this p
 ```
 
 Pairs this machine with a remote server; bare `pom` then proxies its dashboard
-to `127.0.0.1` and forwards service ports. See
-[Connect from another machine](../guide/install#connect-from-another-machine-thin-client).
+to `127.0.0.1` and forwards service ports. Use `ssh://` when only `:22` is open
+(e.g. a Tailscale subnet router) — it tunnels the dashboard, webhook, dev-proxy,
+and service ports over SSH, and the Editor button opens the remote worktree in
+your local editor over ssh. See
+[Remote & failover](../guide/remote#over-ssh-when-only-22-is-open).
 
 ## Run & inspect
 

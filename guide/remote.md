@@ -2,7 +2,7 @@
 
 Run Pomelo on one machine (a homelab box, a VPS) and drive it from your
 laptop. The **server** owns everything — worktrees, services, databases,
-ports, tmux, agents. The **client** is just a window into it. Reach the server
+ports, agents. The **client** is just a window into it. Reach the server
 over your network; **Tailscale** is the easy way to a stable private address.
 
 ::: tip One server per project
@@ -40,6 +40,37 @@ Bare `pom` (while paired) runs a local reverse proxy to the server:
   an app's baked `http://127.0.0.1:<port>` URLs resolve to the real service on
   the server. New services are picked up automatically.
 - Terminals stream through over WebSocket.
+
+### Over SSH — when only `:22` is open
+
+If your VPN reaches the server but the dashboard port is firewalled (common on
+a Tailscale subnet router that only forwards `:22`), pair over SSH instead — no
+exposed port, no token:
+
+```bash
+pom connect ssh://user@my-server            # tunnels the dashboard over SSH
+pom connect ssh://my-host -i ~/.ssh/id_ed25519   # explicit identity
+pom                                         # opens it locally on 127.0.0.1:8765
+```
+
+Bare `pom` supervises an SSH control-master (auto-reconnect, keepalive) that
+forwards the dashboard, the webhook listener, the **dev-proxy** (so
+`*.<branch>.localhost` domains resolve locally), and each workspace's service
+ports. Both ends of the tunnel are loopback, so the server's same-origin check
+passes with **no token**.
+
+::: tip Connect via an ssh config alias
+`pom connect ssh://my-host` where `my-host` is a `Host` block in
+`~/.ssh/config` (with `HostName` + `IdentityFile`) is the smoothest — SSH auth
+and the **Editor** button both resolve through it.
+:::
+
+The **Editor** button works in this mode: it opens the remote worktree in
+**your local editor over ssh** — `zed ssh://my-host/<path>`, or VS Code / Cursor
+via Remote-SSH (`--remote ssh-remote+my-host`), preferring the project's
+`ui.editor`. (In plain HTTP mode the server is the one that launches the editor.)
+
+`pom server <command>` runs directly over ssh in this mode.
 
 ## Run server commands from the client
 
@@ -89,7 +120,7 @@ pom release --worktrees     # also delete branch workspaces (keeps main)
 pom relocate my-server      # SSH preflight + copy-paste migration plan
 ```
 
-It checks the server (pom/git/tmux/zsh/docker/claude/gh, gh auth, and whether
+It checks the server (pom/git/zsh/docker/claude/gh, gh auth, and whether
 the server can clone your repos) and prints what's missing. It **never copies
 secrets** — GitHub auth + an SSH key for git, and Claude auth + your
 `~/.claude` skills, are per-machine and must be set up on the server; relocate
