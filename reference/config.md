@@ -235,9 +235,10 @@ Pomelo falls back to **local docker**, so coding never stalls (dev data is
 disposable — nothing is synced back).
 
 ::: tip Set-up
-- On the box, run the shared services on their **standard ports** (postgres
-  `5432`, redis `6379`, minio `9000`, opensearch `9200`) — e.g. a docker-compose
-  with `restart: unless-stopped`. Pomelo forwards to those.
+- The box **runs Pomelo** managing the same session's shared services (any
+  ports — they're random and that's fine). Pomelo on the laptop asks it
+  (`pom url <session> <service>`) and forwards each; you never configure or even
+  know the remote ports. Everything tunnels through the **one SSH connection**.
 - **SSH-only** by design; auth resolves via `~/.ssh/config`. A background daemon
   needs the key to work non-interactively (agent, or a passphrase-less key).
 - Bonus: an always-on box makes standing up a real OpenSearch for
