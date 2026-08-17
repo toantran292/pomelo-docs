@@ -240,7 +240,7 @@ coding never stalls (dev data is disposable — nothing is synced back).
 Find a service's stable address to paste into DataGrip:
 
 ```bash
-pom url boom postgres     # postgresql://postgres:postgres@localhost:20132
+pom url myproject postgres     # postgresql://postgres:postgres@localhost:20132
 ```
 
 ::: tip Set-up
