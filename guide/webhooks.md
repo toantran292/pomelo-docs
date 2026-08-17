@@ -68,9 +68,9 @@ env:
   POM_OAUTH_STATE_PREFIX: "pom~{{branch_host}}~"   # app appends its own CSRF
 ```
 
-Flow: workspace `crm-855` starts OAuth with `state=pom~crm-855~<csrf>`; the
+Flow: workspace `feat-login` starts OAuth with `state=pom~feat-login~<csrf>`; the
 provider redirects to the single allowlisted URL; the relay reads `state`,
-forwards **only** to `crm-855`, and returns its real response (the redirect).
+forwards **only** to `feat-login`, and returns its real response (the redirect).
 New branches need **no** provider change.
 
 ### 3. `host_routes` — per-workspace subdomain

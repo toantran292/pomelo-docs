@@ -499,6 +499,6 @@ set `domain: localtest.me` (a public wildcard → `127.0.0.1`, zero setup).
 
 A DNS label is capped at 63 characters, so a very long branch name is
 shortened to a truncated prefix plus a short hash (e.g.
-`portal.crm-1069-long-…-a1b2c3d4.localhost`) — otherwise the browser would
+`portal.a-very-long-branch-name-…-a1b2c3d4.localhost`) — otherwise the browser would
 refuse to resolve it. The hash keeps distinct long branches unique; the
 hostname is stable for a given branch.
