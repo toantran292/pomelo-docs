@@ -130,10 +130,44 @@ repos:
 | `copy` | Files copied from the source repo into each worktree. |
 | `env` | Env vars to generate. Flat map → `.env.local`, or file-keyed (see below). Uses [templates](./templates). |
 | `databases` | **Named** map (`name: template`); auto-created per workspace. Referenced as `{{db:name}}`. |
-| `setup` | Commands run after worktree creation. |
+| `seed_from_main` | Clone this repo's DBs from the **main** workspace's copies instead of creating them empty; skips the repo's `seed`. See below. |
+| `setup` | Commands run after worktree creation. Runs the package manager **as written** (see `rewrite_install_pnpm`). |
 | `pre_delete` | Commands run before worktree deletion. |
 | `shortcuts` | Quick commands surfaced in the web UI. |
 | `services` | Named services. See [Services](../guide/services). |
+
+### Faster workspaces — inherit prepared state from `main`
+
+Set up the **main** workspace once (install deps, migrate + seed its DBs) and
+new workspaces copy that prepared state instead of rebuilding it. `main` runs
+services normally — it's the golden source.
+
+```yaml
+repos:
+  api:
+    seed_from_main: true   # clone api's DBs from main (CREATE DATABASE … TEMPLATE)
+```
+
+- **Databases** — `seed_from_main: true` clones the repo's DBs from main's
+  counterparts in seconds (with main's sample data) rather than creating them
+  empty + re-seeding; the repo's own `seed` is skipped. Missing main DB → empty
+  create fallback.
+- **node_modules** — a fresh worktree seeds `node_modules` from a hash-keyed
+  store built off main's installed copy, materialized copy-on-write (APFS
+  clonefile / Linux reflink) so the install is a near-no-op and the tree shares
+  disk blocks. Automatic for non-pnpm repos; pnpm repos are skipped (pnpm's own
+  store already dedupes). Keyed by lockfile hash, so bumping deps on one branch
+  doesn't disturb others.
+- **Long branch → short workspace name** — creating a workspace from a very long
+  branch derives a concise workspace name (folder + hostnames) via a one-shot
+  `claude` call, while the long branch stays the git branch each repo checks
+  out. So `crm-1069-rent-manager-let-partners-…` becomes
+  `workspace--crm-1069-map-partner-custom-fields` with clean
+  `api.crm-1069-map-partner-custom-fields.localhost` hostnames.
+
+`rewrite_install_pnpm` (top level, default **off**): when `local_pm: pnpm`, opt
+in to rewriting `npm install` / `yarn` in `setup` to pnpm. Off means each repo
+runs the package manager its setup declares (avoids force-pnpm bugs).
 
 ### `env`: one key, three forms
 
