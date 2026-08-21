@@ -255,6 +255,27 @@ pom url myproject postgres     # postgresql://postgres:postgres@localhost:20132
   [e2e tests](../guide/services) trivial, off the laptop's RAM.
 :::
 
+### Fixed shared ports without a remote — `shared_stable_ports`
+
+Want the **fixed-port** benefit (configure DataGrip/`psql` once) but running
+shared services in **local docker**, no remote box? Set:
+
+```yaml
+shared_stable_ports: true
+shared_services:
+  postgres:
+  redis:
+  minio:
+  opensearch:
+```
+
+Each shared service is then pinned to the same deterministic local port
+(`20000–29999`, a pure function of session + service name) instead of a random
+one that churns when the port pool moves. The generated docker-compose
+publishes those ports, and `{{conn:*}}` / `{{port:*}}` / `pom url` all agree —
+so `localhost:<port>` never changes across restarts. (Implied automatically
+when `shared_upstream` is set.)
+
 ## Presets
 
 Reusable repo fragments:

@@ -47,9 +47,16 @@ each lease and where it is in its lifecycle (`assigned` → `starting` →
 pom workspace create <combo> <branch>   # alias: pom ws create …
 pom workspace delete <branch>
 pom workspace list
+pom workspace rename <branch> [label]   # friendly display label; omit label to clear
 ```
 
 `workspace` has the short alias **`ws`** (e.g. `pom ws list`).
+
+**Rename** sets a friendly display label on a workspace (stored in
+`.pom-workspace.json`); the git branch stays its real identity, so folders,
+databases, ports and hostnames are untouched. The dashboard shows the label
+with the branch beneath it — or right-click a workspace → **Rename…**. Omit the
+label (or pass an empty one) to clear it.
 
 See [Workspace lifecycle](../guide/workspace).
 
