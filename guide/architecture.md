@@ -78,8 +78,8 @@ Templates surface the resolved values so config never hardcodes a port:
 
 ```yaml
 env:
-  PORT: "{{port:web}}"          # this service's allocated port
-  REDIS_URL: "{{conn:redis}}"   # user:pass@host:port for a shared service
+  PORT: "{{shared.web.port}}"          # this service's allocated port
+  REDIS_URL: "{{shared.redis.url}}"   # user:pass@host:port for a shared service
 ```
 
 ## Service management
@@ -118,14 +118,14 @@ isolation happens at the *data* layer, not by running N copies.
 
 - **Capacity-based slots.** A service with a `capacity:` (for example, the
   16 logical Redis databases) hands each workspace a distinct slot index
-  via `{{slot:NAME}}`, so workspaces share one Redis process but never
+  via `{{slot.NAME}}`, so workspaces share one Redis process but never
   collide on a DB index. Allocations live in `~/.local/state/pom/shared_slots.json`
   behind a slot lock (`withSlotLock`).
 - **Start-on-demand dependency.** Starting a repo service first ensures
   its shared services are up (`docker compose up -d`) — you don't have to
   remember to boot infra first.
 - **Dynamic ports.** Shared services publish on allocated ports surfaced
-  through `{{host:NAME}}`, `{{port:NAME}}`, and `{{conn:NAME}}`, so two
+  through `{{shared.NAME.host}}`, `{{shared.NAME.port}}`, and `{{shared.NAME.url}}`, so two
   projects can each run their own Postgres without a port clash.
 - **Lifecycle.** Once up, shared containers keep running (they're
   background infra with `restart: unless-stopped`) — they don't stop when
@@ -148,13 +148,37 @@ silently breaking a URL at runtime.
 | --- | --- |
 | `{{var:NAME}}` | switchable value — local publisher URL or the active profile's override |
 | `{{var:NAME \| ws}}` | same value, `http→ws` / `https→wss` |
-| `{{host:name}}` / `{{port:name}}` | shared-service host / port |
-| `{{conn:name}}` | `user:pass@host:port` for a shared service |
-| `{{db:name}}` | named, session-prefixed, branch-resolved database |
-| `{{slot:name}}` | capacity slot index for this workspace |
-| `{{branch_safe}}` | workspace branch with `/` and `-` → `_` |
+| `{{shared.name.host}}` / `{{shared.name.port}}` | shared-service host / port |
+| `{{shared.name.url}}` | `user:pass@host:port` for a shared service |
+| `{{db.name}}` | named, session-prefixed, branch-resolved database |
+| `{{slot.name}}` | capacity slot index for this workspace |
+| `{{branch.safe}}` | workspace branch with `/` and `-` → `_` |
 
 See [Templates](../reference/templates) for the full list.
+
+## Onboarding & the Doctor {#onboarding-doctor}
+
+Authoring a correct `pom.yml` for an unfamiliar project is the hard part, so
+Pomelo ships an **onboarding harness** that does it for you. It follows a
+gather → act → verify loop:
+
+- **Gather** — the agent reads every repo: framework, monorepo apps, all
+  long-running processes, the setup command, the shared services from every
+  `docker-compose` (including `extends:` targets), and the repo aliases.
+- **Act** — it authors `pom.yml` and wires env for every shared service,
+  writing config through the MCP config tools (each write is
+  schema-validated before it lands).
+- **Verify** — it runs `config_doctor`, a **structured, machine-readable
+  diagnosis** of whether the project is runnable: invalid config, missing
+  docker/tools/repos, unset secrets, and shared services declared but never
+  wired into any repo env. The agent loops on the result until the Doctor
+  reports zero errors.
+
+The whole thing is **portless and in-process** — `config_doctor` and the
+config tools are built from the config on disk over `pom mcp`, with no
+running dashboard and no port. Because it's one harness, both `pom onboard`
+and the native desktop app's **New session** run the *same* agent, and any
+fix agent gates on the *same* Doctor.
 
 ## The lifecycle pipeline
 

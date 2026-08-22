@@ -12,14 +12,14 @@ Under a repo:
 repos:
   api:
     databases:
-      main: "{{branch_safe}}"          # primary DB
-      test: "{{branch_safe}}_test"     # separate test DB
+      main: "{{branch.safe}}"          # primary DB
+      test: "{{branch.safe}}_test"     # separate test DB
     env:
-      DATABASE_URL: "postgres://{{conn:postgres}}/{{db:main}}"
-      TEST_DATABASE_URL: "postgres://{{conn:postgres}}/{{db:test}}"
+      DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.main}}"
+      TEST_DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.test}}"
 ```
 
-`{{db:NAME}}` resolves to the named entry above (session-prefixed) — names
+`{{db.NAME}}` resolves to the named entry above (session-prefixed) — names
 instead of positional indexes, so reordering the map never breaks a
 reference. The env vars produced for a workspace on branch `feat/login`:
 
@@ -42,7 +42,7 @@ shared_services:
     db_password: postgres
 ```
 
-`{{conn:postgres}}` expands to `db_user:db_password@host:port`.
+`{{shared.postgres.url}}` expands to `db_user:db_password@host:port`.
 
 ## Manage
 

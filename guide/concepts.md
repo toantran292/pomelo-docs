@@ -9,7 +9,7 @@ branch. Pomelo creates it as a sibling folder named `workspace--<branch>/`
 containing one git worktree per repo. Each workspace has its own:
 
 - Branch checkout for every repo it includes
-- Database names (auto-resolved from `{{branch_safe}}` templates)
+- Database names (auto-resolved from `{{branch.safe}}` templates)
 - Port block (a 100-port chunk out of the shared pool)
 - Env files written from the per-repo `env:` block
 
@@ -42,8 +42,8 @@ services:
 
 Containers shared across all workspaces — Postgres, Redis, MinIO, etc. —
 declared under `shared_services:`. Pomelo starts them with docker-compose
-and exposes them on dynamic ports referenced via `{{port:NAME}}` and
-`{{conn:NAME}}` templates.
+and exposes them on dynamic ports referenced via `{{shared.NAME.port}}` and
+`{{shared.NAME.url}}` templates.
 
 ```yaml
 shared_services:

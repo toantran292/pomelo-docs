@@ -98,10 +98,10 @@ repos:
     # worktree-time config
     copy: [.env, .env.secrets] # files copied from repo to worktree
     databases:                 # named — auto-created per workspace
-      main: "{{branch_safe}}"
-      test: "{{branch_safe}}_test"
+      main: "{{branch.safe}}"
+      test: "{{branch.safe}}_test"
     env:                       # env templates (resolved per workspace)
-      DATABASE_URL: "postgres://{{conn:postgres}}/{{db:main}}"
+      DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.main}}"
       WEB_HOST: "{{var:WEB_URL}}"
     setup:                     # run after worktree exists
       - bundle install
@@ -129,7 +129,7 @@ repos:
 | `environments` | Profiles offered to this repo's services (default `[local]`). A service can narrow it. |
 | `copy` | Files copied from the source repo into each worktree. |
 | `env` | Env vars to generate. Flat map → `.env.local`, or file-keyed (see below). Uses [templates](./templates). |
-| `databases` | **Named** map (`name: template`); auto-created per workspace. Referenced as `{{db:name}}`. |
+| `databases` | **Named** map (`name: template`); auto-created per workspace. Referenced as `{{db.name}}`. |
 | `seed_from_main` | Clone this repo's DBs from the **main** workspace's copies instead of creating them empty; skips the repo's `seed`. See below. |
 | `setup` | Commands run after worktree creation. Runs the package manager **as written** (see `rewrite_install_pnpm`). |
 | `pre_delete` | Commands run before worktree deletion. |
@@ -177,23 +177,23 @@ variables and decides the target file(s):
 ```yaml
 # 1. Flat → written to .env.local
 env:
-  DATABASE_URL: "postgres://{{conn:postgres}}/{{db:main}}"
+  DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.main}}"
 
 # 2. File-keyed → each file gets exactly its own vars
 env:
   .env.development.local:
-    DATABASE_URL: "postgres://{{conn:postgres}}/{{db:dev}}"
+    DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.dev}}"
   .env.test.local:
-    DATABASE_URL: "postgres://{{conn:postgres}}/{{db:test}}"
+    DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.test}}"
 
 # 3. File-keyed + shared base ("*" applies to every file)
 env:
   "*":
     WEB_HOST: "{{var:WEB_URL}}"
   .env.development.local:
-    DATABASE_URL: "postgres://{{conn:postgres}}/{{db:dev}}"
+    DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.dev}}"
   .env.test.local:
-    DATABASE_URL: "postgres://{{conn:postgres}}/{{db:test}}"
+    DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.test}}"
 ```
 
 A file-specific value overrides `"*"`.
@@ -266,7 +266,7 @@ When `shared_upstream` is set, each shared service gets a **fixed local port**
 (deterministic, `20000–29999`, never changes across restarts). Pomelo
 SSH-forwards that fixed port to the box's actual (random) port — discovered
 over the same SSH connection, so you never configure or even know the remote
-port. `{{conn:*}}` and any local tool — **DataGrip**, `psql` — use the fixed
+port. `{{shared.*.url}}` and any local tool — **DataGrip**, `psql` — use the fixed
 `localhost:<port>` and are configured **once**. If the box is **unreachable** at
 startup, Pomelo falls back to **local docker** on the same fixed ports, so
 coding never stalls (dev data is disposable — nothing is synced back).
@@ -306,7 +306,7 @@ shared_services:
 Each shared service is then pinned to the same deterministic local port
 (`20000–29999`, a pure function of session + service name) instead of a random
 one that churns when the port pool moves. The generated docker-compose
-publishes those ports, and `{{conn:*}}` / `{{port:*}}` / `pom url` all agree —
+publishes those ports, and `{{shared.*.url}}` / `{{shared.*.port}}` / `pom url` all agree —
 so `localhost:<port>` never changes across restarts. (Implied automatically
 when `shared_upstream` is set.)
 
@@ -318,7 +318,7 @@ Reusable repo fragments:
 presets:
   shared-infra:
     env:
-      REDIS_URL: "redis://{{host:redis}}:{{port:redis}}/{{slot:redis}}"
+      REDIS_URL: "redis://{{shared.redis.host}}:{{shared.redis.port}}/{{slot.redis}}"
 ```
 
 A repo with `preset: shared-infra` inherits those fields. Multiple
@@ -456,13 +456,13 @@ webhook:
     "/portal/v1/nylas/auth/callback": portal/api   # → the workspace named in ?state=
 ```
 
-The app builds `state` from the `{{branch_host}}` template, so each workspace
+The app builds `state` from the `{{branch.host}}` template, so each workspace
 identifies itself:
 
 ```yaml
 env:
-  # the app appends its own CSRF: state = "pom~{{branch_host}}~" + csrf
-  POM_OAUTH_STATE_PREFIX: "pom~{{branch_host}}~"
+  # the app appends its own CSRF: state = "pom~{{branch.host}}~" + csrf
+  POM_OAUTH_STATE_PREFIX: "pom~{{branch.host}}~"
 ```
 
 So `feat-login` sends `state=pom~feat-login~…`; the callback hits the single
@@ -481,7 +481,7 @@ webhook:
     "portal.example.com": portal/api   # <branch>.portal.example.com → that ONE workspace
 ```
 with a Cloudflare **wildcard** `*.portal.example.com` and per-workspace URLs
-via `{{branch_host}}`. For OAuth providers that demand exact redirect URIs,
+via `{{branch.host}}`. For OAuth providers that demand exact redirect URIs,
 prefer `state_routes` above.
 
 **Cloudflare Tunnel setup:** point **one** public hostname's Service URL at
@@ -526,7 +526,7 @@ no frontend code changes):
 
 ```yaml
 env:
-  NEXT_PUBLIC_API_URL: "http://client.{{branch_host}}.localhost:8767/be/api"
+  NEXT_PUBLIC_API_URL: "http://client.{{branch.host}}.localhost:8767/be/api"
 ```
 
 ::: warning Server-side frontends (Next.js): don't reuse `/api`

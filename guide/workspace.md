@@ -156,11 +156,14 @@ So mid-task you can say *"the migration failed — check the DB and rerun
 it"* or *"add a worker service and start it"*, and the agent uses these
 tools instead of guessing ports or hand-editing config. It reads your
 `shortcuts`/`setup` first, so an agent runs your exact `db:migrate` recipe
-(or `pnpm install`, honoring `local_pm`) rather than inventing one. It talks
-to your already-running dashboard over loopback; nothing leaves your machine.
+(or `pnpm install`, honoring `local_pm`) rather than inventing one. Nothing
+leaves your machine.
 
 `pom mcp` is the underlying command; it's wired up automatically (registered
-as the `pom` MCP server), so you rarely run it yourself.
+as the `pom` MCP server), so you rarely run it yourself. It's **portless**:
+it finds your project config by walking up from the current directory and
+builds the `/api` handler in-process — no running dashboard and no port
+needed.
 
 ### Multi-repo workspace map
 

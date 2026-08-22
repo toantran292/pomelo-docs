@@ -17,11 +17,30 @@ devices on your LAN. Use `--host 127.0.0.1` to keep it local-only.
 ```bash
 pom init [name]              # scaffold a project from the git repo you're in
 pom init --claude            # then let claude tailor pom.yml with you (interactive)
+pom onboard --new <name> --repo <path|url> [--repo …]   # scaffold + let an agent write pom.yml
+pom onboard <session>        # run the onboarding agent on an existing session
 pom setup                    # one-time: global gitignore
 pom doctor                   # check tools, services & config; point at fixes
 pom update                   # download + install the latest release
 pom update --rollback        # restore the previous binary (undo last update)
 ```
+
+`onboard` runs an **autonomous onboarding agent** in a single portless
+process. With `--new` it first scaffolds a session (clones every `--repo`,
+writes a seed `pom.yml`), then the agent reads every repo — detecting the
+framework, monorepo apps, all long-running processes, the setup command,
+the shared services from every `docker-compose` (including `extends:`
+targets), and the repo aliases — authors a correct `pom.yml`, wires env for
+every shared service, and loops `config_doctor` until it reports zero
+errors. Point it at an existing session name to re-run it there. The native
+desktop app runs the **same** agent automatically after **New session**.
+
+| Flag | Meaning |
+| --- | --- |
+| `--new <name>` | Scaffold a new session with this name before running the agent |
+| `--repo <path|url>` | A repo to clone/add (repeat for multiple repos) |
+| `--branch <name>` | Branch to check out (default `main`) |
+| `--model <name>` | Model for the agent (e.g. `sonnet`) |
 
 `setup` runs from anywhere (no project needed) and needs **no `sudo`** — ports
 are allocated dynamically on `127.0.0.1`, so there's no loopback alias to
@@ -140,6 +159,22 @@ your local editor over ssh. See
 pom run <service> <cmd...>   # run a one-off command in a service's env
 pom disk                     # report disk usage of worktrees + volumes
 ```
+
+## Agents (MCP)
+
+```bash
+pom mcp                      # stdio MCP server exposing this project's env to agents
+```
+
+`pom mcp` is a **portless, in-process** stdio MCP server. It finds the
+project config by walking up from the current directory and builds the `/api`
+handler in-process — no running dashboard and no `:8765` are required. It
+exposes a workspace's env (ports, databases, services, config, `run_in_env`)
+to agents, and is wired into Claude windows automatically. Among its tools is
+`config_doctor` — the same structured diagnosis the [Doctor](../guide/architecture#onboarding-doctor)
+runs — which reports whether the project is runnable (invalid config, missing
+docker/tools/repos, unset secrets, or shared services declared but never wired
+into any repo env). The onboarding and fix agents loop on it until it is clean.
 
 ## Misc
 

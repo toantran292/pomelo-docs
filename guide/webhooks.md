@@ -59,13 +59,13 @@ webhook:
     "/portal/v1/nylas/auth/callback": portal/api
 ```
 
-The app builds `state` from the [`{{branch_host}}`](../reference/templates)
+The app builds `state` from the [`{{branch.host}}`](../reference/templates)
 template so each workspace identifies itself:
 
 ```yaml
 env:
   NYLAS_CALLBACK_URI: "https://portal.example.com/portal/v1/nylas/auth/callback"  # the ONE URL
-  POM_OAUTH_STATE_PREFIX: "pom~{{branch_host}}~"   # app appends its own CSRF
+  POM_OAUTH_STATE_PREFIX: "pom~{{branch.host}}~"   # app appends its own CSRF
 ```
 
 Flow: workspace `feat-login` starts OAuth with `state=pom~feat-login~<csrf>`; the
@@ -85,7 +85,7 @@ webhook:
 ```
 
 with a wildcard `*.portal.example.com` at the tunnel and per-workspace URLs via
-`{{branch_host}}`. For OAuth providers that demand exact redirect URIs, prefer
+`{{branch.host}}`. For OAuth providers that demand exact redirect URIs, prefer
 `state_routes`.
 
 ## How the relay picks the workspace

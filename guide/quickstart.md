@@ -29,6 +29,23 @@ For a non-trivial project (multiple services, databases, env), add `--claude`:
 databases and env before writing a tailored `pom.yml` — it asks rather than
 guesses. (Requires the `claude` CLI.)
 
+## Hands-off onboarding: `pom onboard`
+
+To skip writing config entirely, let an autonomous agent do it:
+
+```bash
+pom onboard --new my-app --repo . --repo ../another-service
+```
+
+This scaffolds a session (clones each `--repo`, writes a seed `pom.yml`),
+then the agent reads every repo — framework, monorepo apps, long-running
+processes, setup command, shared services from every `docker-compose`, and
+repo aliases — authors a correct `pom.yml`, wires env for every shared
+service, and loops the [Doctor](architecture#onboarding-doctor) until it
+reports zero errors. Point it at an existing session (`pom onboard <name>`)
+to re-run it. The native desktop app runs the **same** agent automatically
+after **New session** — you just add repos and it writes the config for you.
+
 ## 1. Or write `pom.yml` by hand
 
 In your monorepo root:
@@ -52,9 +69,9 @@ repos:
     default_branch: master
     preset: shared-infra
     databases:
-      main: "{{branch_safe}}"
+      main: "{{branch.safe}}"
     env:
-      DATABASE_URL: "postgres://{{conn:postgres}}/{{db:main}}"
+      DATABASE_URL: "postgres://{{shared.postgres.url}}/{{db.main}}"
     setup: [bundle install, bundle exec rake db:migrate]
     services:
       web:
