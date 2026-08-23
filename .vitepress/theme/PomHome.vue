@@ -11,7 +11,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
   <section class="ph-wrap ph-hero">
     <div class="hero-cols">
       <div class="hero-text">
-        <div class="eyebrow">POMELO · v0.10.16 · NATIVE macOS APP</div>
+        <div class="eyebrow">POMELO · v0.10.17 · NATIVE macOS APP</div>
         <h1>A dev environment.<br><span class="muted">One per branch.</span></h1>
         <p class="lead">A native macOS app that spins up a full, isolated, runnable
           environment for every branch — services, databases, and shared infra,
