@@ -61,6 +61,8 @@ under the top-level [`environments`](../reference/config#environments-profiles).
 
 ## Start / stop
 
+<Shot text="Service cards — start, stop, live preview" />
+
 From the **service board**, use the start/stop control on any service
 card, or a repo column's menu to **Start all / Stop all** of that repo's
 services at once.
@@ -76,6 +78,8 @@ each a stable hostname.
 :::
 
 ## Shortcuts (the ⚡ menu)
+
+<Shot text="The bolt menu — run migrate, install, test…" />
 
 Declare quick commands per repo and run them from the bolt **⚡ menu** on a
 service card. Each runs in the worktree with the workspace's resolved env

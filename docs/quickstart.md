@@ -3,6 +3,8 @@
 From zero to a running branch in a few minutes — all in the app, no CLI
 required.
 
+<Shot text="The Pomelo window — sidebar of workspaces + service board" />
+
 ## 1. Install and open
 
 Download **`Pomelo-<version>.dmg`** from the
@@ -16,6 +18,8 @@ On first launch Pomelo asks for the parent folder it will create
 per-branch worktrees under (for example `~/pom`). Your repos and every
 `workspace--<branch>/` folder live here.
 
+<Shot text="First-run welcome — Open a project… / New project…" />
+
 ## 3. New session — add your repos
 
 Click **＋ New session**, give it a name, and add your repos. Each repo is
@@ -25,6 +29,8 @@ either:
 - a **git URL** (SSH or HTTPS) that Pomelo clones for you.
 
 A session can hold one repo or several — a whole multi-repo project.
+
+<Shot text="New session sheet — add repos by folder or git URL" />
 
 ## 4. Let the onboarding agent write `pom.yml`
 
@@ -54,6 +60,8 @@ On the **service board**, start a service from its card. Starting a repo
 service brings up its shared services (Postgres, Redis, …) automatically.
 Each service's live output previews on its card; click the card to attach
 a full terminal.
+
+<Shot text="Service board — services running with live previews" />
 
 To work on a feature, create a workspace for a branch (see
 [Workspace lifecycle](./workspace)) and start its services the same way —

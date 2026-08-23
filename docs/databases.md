@@ -60,6 +60,8 @@ create. See [Workspace › Seed from main](./workspace#seed-from-main).
 
 ## Manage
 
+<Shot text="Reset databases from the workspace menu" />
+
 Manage a workspace's databases from its menu in the app — create, drop, or
 reset all databases for that workspace at once. Databases are also created
 automatically when the workspace is created, and dropped when it's

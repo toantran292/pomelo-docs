@@ -6,6 +6,8 @@ a git worktree per repo, with its own ports, env, and databases.
 
 ## Create
 
+<Shot text="Create a workspace for a branch" />
+
 In the app, use the **create-workspace** control in the sidebar: enter a
 branch (or a Jira ticket + a short description, which form the branch) and
 pick the repos to include. Pomelo builds the workspace — worktrees,

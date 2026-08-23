@@ -93,109 +93,23 @@
   --vp-code-block-bg: #100c13;
 }
 
-/* A whisper of the icon's pastel wash at the very top of every page. */
-.VPHome::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 620px;
-  background: radial-gradient(120% 90% at 70% -10%,
-    rgba(232, 111, 168, 0.16) 0%,
-    rgba(166, 61, 158, 0.10) 34%,
-    rgba(205, 212, 238, 0.10) 60%,
-    transparent 78%);
-  pointer-events: none;
-  z-index: 0;
-}
-.dark .VPHome::before {
-  background: radial-gradient(120% 90% at 70% -10%,
-    rgba(213, 129, 207, 0.14) 0%,
-    rgba(166, 61, 158, 0.12) 40%,
-    transparent 74%);
-}
-.VPHome .VPHero, .VPHome .VPFeatures { position: relative; z-index: 1; }
+/* ============================================================
+   Landing (index.md → layout: page + <PomHome/>)
+   ============================================================ */
+.dark { --vp-c-bg: #0d0a11; }
+html, body { overflow-x: hidden; }
 
-.VPNav { backdrop-filter: saturate(1.8) blur(20px); }
-.VPHero .image-src { border-radius: 26px; }
+/* Full-bleed the page-layout container on the landing only */
+.pom-landing .VPPage,
+.pom-landing .VPPage .vp-doc { max-width: none !important; padding: 0 !important; }
+.pom-landing .VPPage > .vp-doc > div { width: 100%; }
 
-:root { --vp-font-family-mono: var(--pom-mono); }
-.vp-doc :not(pre) > code { font-size: 0.85em; }
-
-.VPFeature {
-  border-radius: 16px;
-  transition: border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+/* Download → a compact accent pill in the top nav. Style the inner .text span
+   (not the full-height <a>) so it fits the bar instead of overflowing it. */
+.VPNavBarMenuLink[href*="releases/latest"] .text {
+  background: var(--vp-c-brand-1); color: #fff !important;
+  padding: 7px 15px; border-radius: 20px; border-bottom: 0 !important;
+  transition: background 0.16s;
 }
-.VPFeature:hover {
-  transform: translateY(-3px);
-  border-color: rgba(166, 61, 158, 0.34);
-  box-shadow: 0 10px 30px rgba(140, 51, 135, 0.14);
-}
-.VPFeature .icon {
-  background: var(--vp-c-brand-soft) !important;
-  border-radius: 12px;
-}
-.dark .VPFeature { background: #1f1823; border-color: rgba(255, 255, 255, 0.09); }
-.dark .VPFeature:hover { border-color: rgba(213, 129, 207, 0.38); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
-
-/* ---- Home: product mockup under the hero ---- */
-.pom-hero-mock {
-  position: relative; z-index: 1;
-  max-width: 1100px; margin: 8px auto 0; padding: 0 24px;
-}
-
-/* ---- Home: custom bands below the default hero/features ---- */
-.pom-specs {
-  position: relative; z-index: 1;
-  max-width: 1152px; margin: 8px auto 0; padding: 0 24px;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-}
-@media (max-width: 768px) { .pom-specs { grid-template-columns: repeat(2, 1fr); } }
-.pom-specs > div {
-  border: 1px solid var(--vp-c-border); border-radius: 14px;
-  background: var(--vp-c-bg-soft); padding: 16px 18px;
-}
-.pom-specs b { display: block; font-size: 15px; color: var(--vp-c-text-1); }
-.pom-specs span { display: block; margin-top: 3px; font-size: 12.5px; color: var(--vp-c-text-3); }
-
-.pom-section {
-  position: relative; z-index: 1;
-  max-width: 1152px; margin: 40px auto 0; padding: 0 24px;
-}
-.pom-section h2 { border: 0; padding: 0; margin: 0 0 24px; font-size: 28px; letter-spacing: -0.02em; }
-
-.pom-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-@media (max-width: 768px) { .pom-steps { grid-template-columns: 1fr; } }
-.pom-step {
-  border: 1px solid var(--vp-c-border); border-radius: 16px;
-  background: var(--vp-c-bg-soft); padding: 22px 22px 20px;
-}
-.pom-num {
-  display: inline-block; font-family: var(--pom-mono); font-size: 13px; font-weight: 700;
-  color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft);
-  padding: 3px 9px; border-radius: 8px; margin-bottom: 12px;
-}
-.pom-step h3 { margin: 0 0 6px; font-size: 17px; }
-.pom-step p { margin: 0; font-size: 14px; color: var(--vp-c-text-2); line-height: 1.6; }
-
-.pom-cta {
-  border: 1px solid var(--vp-c-border); border-radius: 20px; margin-top: 48px; margin-bottom: 8px;
-  padding: 40px 32px;
-  background:
-    radial-gradient(120% 140% at 100% 0%, rgba(232,111,168,0.14), transparent 55%),
-    radial-gradient(120% 140% at 0% 100%, rgba(205,212,238,0.16), transparent 55%),
-    var(--vp-c-bg-soft);
-}
-.pom-cta h2 { max-width: 720px; font-size: 26px; }
-.pom-cta p { max-width: 720px; color: var(--vp-c-text-2); font-size: 15px; line-height: 1.7; }
-.pom-cta-actions { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
-.pom-btn {
-  display: inline-block; font-size: 14px; font-weight: 600; text-decoration: none;
-  padding: 11px 20px; border-radius: 22px;
-  background: var(--vp-c-brand-1); color: #fff; transition: background 0.16s;
-}
-.pom-btn:hover { background: var(--vp-c-brand-3); }
-.pom-btn-alt { background: transparent; color: var(--vp-c-brand-1); border: 1px solid var(--vp-c-border); }
-.pom-btn-alt:hover { background: var(--vp-c-brand-soft); }
-.dark .pom-btn { color: #1a0f18; }
+.dark .VPNavBarMenuLink[href*="releases/latest"] .text { color: #1a0f18 !important; }
+.VPNavBarMenuLink[href*="releases/latest"]:hover .text { background: var(--vp-c-brand-3); }

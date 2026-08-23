@@ -5,6 +5,8 @@ day. It links the Go core directly (in-process, no port, no browser), so
 everything you see is the real state of your worktrees, services, and
 agents. This page is the conceptual tour.
 
+<Shot text="The full app window — sidebar, service board, tabs" />
+
 ## Layout
 
 The window is three columns plus a top bar:
@@ -50,6 +52,8 @@ The board groups services by repo, one column each. On a service card:
 - **⚡ menu** — run any of the repo's `shortcuts` (install, migrate, lint,
   test…) in the resolved workspace env.
 
+<Shot text="Service board — columns per repo, cards per service" />
+
 ## Terminals
 
 Open a terminal on any workspace or attach a service's output as a tab.
@@ -70,6 +74,8 @@ A Claude tab surfaces the agent's live state — **idle**, **working**, or
 **awaiting input** — on the tab and the sidebar, so you can tell at a
 glance when an agent needs a reply. To control the agent, use the
 controls on its tab to **Restart** or **Stop**.
+
+<Shot text="Claude tab — agent working inside a workspace" />
 
 ## Reviewing code & PRs
 

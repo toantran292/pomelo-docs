@@ -1,7 +1,14 @@
 import DefaultTheme from 'vitepress/theme'
-import Layout from './Layout.vue'
+import PomHome from './PomHome.vue'
+import Shot from './Shot.vue'
 import './custom.css'
 
-// Default theme restyled to the app's color language (custom.css), with a
-// custom Layout that drops a product mockup under the home hero.
-export default { ...DefaultTheme, Layout }
+// Default theme, restyled (custom.css) + a bespoke landing (PomHome) and a
+// screenshot placeholder (<Shot>) usable in any docs page.
+export default {
+  ...DefaultTheme,
+  enhanceApp({ app }) {
+    app.component('PomHome', PomHome)
+    app.component('Shot', Shot)
+  },
+}
