@@ -1,8 +1,7 @@
 # `pom.yml` reference
 
 The project config. Pomelo walks up from the current directory looking
-for this file — keep it at the monorepo root. (`tncli.yml` is still read as
-a fallback, so existing projects keep working.)
+for this file — keep it at the monorepo root.
 
 ## Splitting into multiple files
 

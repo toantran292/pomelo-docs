@@ -41,7 +41,7 @@ use — Pomelo detects each and only asks when a repo actually needs it.
 
 ## Existing config carries over
 
-Already have a `pom.yml` (or a legacy `tncli.yml`), even a heavily customized
+Already have a `pom.yml`, even a heavily customized
 one? Open Pomelo, point it at that project folder, and it loads your config
 **as-is** — nothing to migrate or rewrite. Your workspaces and repos show up as
 before, now in the native UI.
