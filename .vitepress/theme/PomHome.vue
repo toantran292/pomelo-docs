@@ -20,7 +20,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
           <a class="btn primary" :href="DL">Download for macOS</a>
           <a class="btn ghost" :href="GH">View source</a>
         </div>
-        <div class="ph-meta">macOS 14+ · Apple Silicon &amp; Intel · Notarized · No account · ~10 MB</div>
+        <div class="ph-meta">macOS 14+ · Apple Silicon &amp; Intel · Notarized · No account · ~28 MB</div>
       </div>
       <img class="hero-icon" src="/hero-icon.png" alt="Pomelo" />
     </div>
@@ -63,7 +63,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
       <div class="spec"><b>120fps</b><span>built for ProMotion; streams and terminals stay smooth</span></div>
       <div class="spec"><b>Portless</b><span>the Go core links in-process over FFI — no localhost server</span></div>
       <div class="spec"><b>Notarized</b><span>Apple Developer ID, no Gatekeeper prompts</span></div>
-      <div class="spec"><b>~10 MB</b><span>one signed binary, no runtime to ship</span></div>
+      <div class="spec"><b>~28 MB</b><span>self-contained app, no separate runtime</span></div>
     </div>
   </section>
 
@@ -90,7 +90,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
     <div class="grid2 gs">
       <div>
         <h3>Download</h3>
-        <p>macOS 14 or later. Apple Silicon and Intel. About 10 MB.</p>
+        <p>macOS 14 or later. Apple Silicon and Intel. About 28 MB.</p>
         <div class="ph-actions"><a class="btn primary" :href="DL">Download for macOS</a></div>
         <p class="fine">Open the DMG, drag Pomelo to Applications, launch it, and point it at the folder that holds your repos.</p>
       </div>
