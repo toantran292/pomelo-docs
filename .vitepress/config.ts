@@ -85,8 +85,7 @@ export default defineConfig({
     ],
 
     footer: {
-      message: 'Released under MIT',
-      copyright: 'Copyright © toantran292'
+      copyright: '© 2026 toantran292'
     }
   }
 })
