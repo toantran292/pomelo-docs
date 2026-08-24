@@ -4,7 +4,7 @@ Pomelo is a **native macOS app**. Download the DMG, drag it to Applications,
 open it. That's the whole install — no account, no CLI, no setup wizard.
 
 ::: info Requirements
-macOS 14 (Sonoma) or later · Apple Silicon or Intel · signed with an Apple
+macOS 14 (Sonoma) or later · Apple Silicon · signed with an Apple
 Developer ID and notarized, so it opens without Gatekeeper warnings.
 :::
 

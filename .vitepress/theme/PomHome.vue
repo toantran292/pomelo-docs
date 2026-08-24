@@ -35,7 +35,7 @@ onMounted(async () => {
           <a class="btn primary" :href="DL">Download for macOS</a>
           <a class="btn ghost" :href="GH">View source</a>
         </div>
-        <div class="ph-meta">macOS 14+ · Apple Silicon &amp; Intel · Notarized · No account · ~{{ dmgMB }} MB download</div>
+        <div class="ph-meta">macOS 14+ · Apple Silicon · Notarized · No account · ~{{ dmgMB }} MB download</div>
       </div>
       <img class="hero-icon" src="/hero-icon.png" alt="Pomelo" />
     </div>
@@ -120,7 +120,7 @@ onMounted(async () => {
     <div class="grid2 gs">
       <div>
         <h3>Download</h3>
-        <p>macOS 14 or later. Apple Silicon and Intel. About {{ dmgMB }} MB to download.</p>
+        <p>macOS 14 or later. Apple Silicon. About {{ dmgMB }} MB to download.</p>
         <div class="ph-actions"><a class="btn primary" :href="DL">Download for macOS</a></div>
         <p class="fine">Open the DMG, drag Pomelo to Applications, launch it, and point it at the folder that holds your repos.</p>
       </div>
