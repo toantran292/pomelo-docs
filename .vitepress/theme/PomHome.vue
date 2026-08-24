@@ -79,7 +79,7 @@ onMounted(async () => {
       <div class="pt"><h3>Postgres &amp; Redis</h3><p>Inspect Postgres tables and Redis keyspaces over the same connection your services use — wired automatically, nothing to configure.</p></div>
       <div class="pt"><h3>Your agent can too</h3><p>Claude in the workspace lists tables and queries the branch database over MCP while it builds — no copy-pasting connection strings.</p></div>
     </div>
-    <p class="fine">A convenience for quick checks while you work — a supportive part of the workflow, not a replacement for a full-featured database IDE.</p>
+    <p class="fine">Made for the checks you run constantly while coding — inspect a row, confirm a migration, tweak a query — right where you work, no separate client to wire up.</p>
     <div class="ph-media">Database browser — drop a screenshot here</div>
   </section>
 
@@ -179,6 +179,9 @@ h2 { font-size: clamp(1.8rem, 3.6vw, 2.9rem); margin: 14px 0 0; }
   color: var(--vp-c-text-3); font-family: var(--pom-mono); font-size: 13px;
 }
 .ph-media-lg { margin-top: 48px; box-shadow: 0 50px 120px -60px rgba(120,30,110,0.5); }
+/* Real screenshot: swap a `.ph-media` placeholder div for
+   <img class="ph-shot" src="/shots/x.png" alt="…" />. */
+.ph-shot { display: block; width: 100%; margin-top: 40px; border-radius: 16px; border: 1px solid var(--vp-c-border); }
 
 /* Sections */
 .ph-sec { padding-top: clamp(64px, 9vw, 128px); }

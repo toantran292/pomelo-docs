@@ -81,9 +81,10 @@ so there's nothing to configure:
 - Or run SQL in a console with syntax highlighting and schema-aware
   autocomplete.
 
-It's a convenience for quick checks while you work — a supportive part of the
-workflow, not a replacement for a full-featured database IDE. The workspace's
-Claude agent can query the same databases over MCP while it builds.
+Made for the checks you run constantly while coding — inspect a row, confirm a
+migration, tweak a query — right where you work, no separate client to wire up.
+The workspace's Claude agent can query the same databases over MCP while it
+builds.
 
 ## Writing `pom.yml` by hand
 

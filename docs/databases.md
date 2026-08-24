@@ -96,7 +96,7 @@ client. Pomelo already knows the connection, so there's nothing to wire up:
   to CSV.
 - A SQL console with syntax highlighting and schema-aware autocomplete.
 
-It's a convenience for quick checks during development — a supportive part of
-the workflow, not a replacement for a full-featured database IDE. The
-workspace's [Claude agent](./workspace#agent-tools-mcp) can query the same
+Made for the checks you run constantly while coding — inspect a row, confirm a
+migration, tweak a query — right where you work, no separate client to wire up.
+The workspace's [Claude agent](./workspace#agent-tools-mcp) can query the same
 databases over MCP while it works.
