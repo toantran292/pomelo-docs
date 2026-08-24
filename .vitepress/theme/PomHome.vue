@@ -76,7 +76,7 @@ onMounted(async () => {
     </div>
     <div class="grid3">
       <div class="pt"><h3>Browse &amp; query</h3><p>A tree of every per-branch database down to its tables. Open a table as a data grid, or run SQL in a console with syntax highlighting and schema-aware autocomplete.</p></div>
-      <div class="pt"><h3>Postgres &amp; Redis</h3><p>Inspect Postgres tables and Redis keyspaces over the same connection your services use — wired automatically, nothing to configure.</p></div>
+      <div class="pt"><h3>Multiple engines</h3><p>Inspect Postgres tables and Redis keyspaces today — with more engines on the way — over the same connection your services use, wired automatically.</p></div>
       <div class="pt"><h3>Your agent can too</h3><p>Claude in the workspace lists tables and queries the branch database over MCP while it builds — no copy-pasting connection strings.</p></div>
     </div>
     <p class="fine">Made for the checks you run constantly while coding — inspect a row, confirm a migration, tweak a query — right where you work, no separate client to wire up.</p>

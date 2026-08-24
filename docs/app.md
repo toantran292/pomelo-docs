@@ -77,6 +77,18 @@ controls on its tab to **Restart** or **Stop**.
 
 <Shot text="Claude tab — agent working inside a workspace" />
 
+## Notifications
+
+Long agent runs mean you're often doing something else while Claude works.
+Pomelo posts a native macOS notification — a sound and a banner — when an
+agent **finishes**, **asks for input**, or **compacts** its context, but only
+for a workspace you're **not** currently viewing (no pings for what's already
+on screen). Click the notification to jump straight to that workspace.
+
+Turn it on with **Notify on Claude activity** in **Settings** (macOS asks for
+notification permission the first time); there's a **Send test notification**
+button to confirm it's working.
+
 ## Reviewing code & PRs
 
 The sidebar PR pill pulls status straight from GitHub (via `gh`):
