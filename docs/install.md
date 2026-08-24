@@ -35,9 +35,12 @@ use — Pomelo detects each and only asks when a repo actually needs it.
 | Tool | Needed for | Install |
 | :--- | :--- | :--- |
 | **git** | Per-branch worktrees (always) | `xcode-select --install` |
-| **gh** | PR status, checks, mergeability | `brew install gh` → `gh auth login` |
 | **claude** | Built-in Claude agent + onboarding | `npm i -g @anthropic-ai/claude-code` |
 | **docker** | Shared services (Postgres/Redis/MinIO/OpenSearch) | `brew install --cask docker` |
+
+PR status comes from GitHub directly (no `gh` CLI needed) — add a read-only
+token in **Settings ▸ Integrations ▸ Forge · GitHub**. See
+[Connecting GitHub](/docs/app#connecting-github).
 
 ## Existing config carries over
 

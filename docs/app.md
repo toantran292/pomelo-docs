@@ -91,12 +91,33 @@ button to confirm it's working.
 
 ## Reviewing code & PRs
 
-The sidebar PR pill pulls status straight from GitHub (via `gh`):
-per-branch checks, review state, and **mergeability** (can it merge, and
-if not, why). Pomelo never merges for you — it shows you where each PR
-stands and links out to GitHub. PR data is fetched by exact head branch,
-cached, and served stale while refreshing, so the UI never blocks on
-GitHub.
+The sidebar PR pill pulls status straight from GitHub: per-branch checks,
+review state, and **mergeability** (can it merge, and if not, why). Pomelo
+never merges for you — it shows you where each PR stands and links out to
+GitHub. PR data is fetched by exact head branch, cached, and served stale
+while refreshing, so the UI never blocks on GitHub.
+
+Pomelo talks to GitHub **directly over the GraphQL/REST API** — no `gh` CLI
+required. Diffs, changed files and commits are read from your local git
+worktree (fast, offline, no API cost); only PR list, description, reviewers,
+comments and check status come from the API.
+
+### Connecting GitHub
+
+Pomelo only ever **reads** PRs, so it needs a read-only token. Add one in
+**Settings ▸ Integrations ▸ Forge · GitHub**, then hit **Test**. Any of these
+works:
+
+- **`gh auth token`** — if you already use the GitHub CLI, paste its token
+  (or `export GH_TOKEN=$(gh auth token)` in your shell). Nothing else to set up.
+- **Classic PAT** — scope `repo` (needed to read private repositories).
+- **Fine-grained PAT** — repository access to the repos you work on, with
+  **Pull requests: Read-only**, **Contents: Read-only**, **Metadata:
+  Read-only**. On an organization these require the org to approve the token.
+
+The token is read from `GH_TOKEN`/`GITHUB_TOKEN` in your environment first,
+otherwise from the encrypted app-local secret you saved. It is never written
+to `pom.yml`.
 
 ## Themes
 

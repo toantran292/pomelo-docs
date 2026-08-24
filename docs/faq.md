@@ -47,7 +47,13 @@ into the worktree and before the command.
 
 ## PR badges / checks don't show up
 
-- Run `gh auth login` once — PR data comes from the GitHub CLI's token.
+- Add a GitHub token in **Settings ▸ Integrations ▸ Forge · GitHub** and hit
+  **Test**. Pomelo talks to GitHub directly (no `gh` CLI) — a read-only token
+  is enough (classic `repo`, a fine-grained PAT with Pull requests/Contents/
+  Metadata read, or `export GH_TOKEN=$(gh auth token)`). See
+  [Connecting GitHub](/docs/app#connecting-github).
+- On an **organization**, a fine-grained token must be approved by an org
+  admin before it works.
 - The repo needs a GitHub `origin` remote. **SSH host aliases work**
   (e.g. `git@myalias:owner/repo` from your `~/.ssh/config`) — Pomelo reads
   `owner/repo` from any URL form.
