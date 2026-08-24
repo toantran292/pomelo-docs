@@ -34,8 +34,11 @@ databases. A workspace contains one git worktree per repo it activates.
 ## Service
 
 A **service** is a long-running process — a web server, a worker, a
-console. Each service runs on Pomelo's own managed PTY holder, so logs
-persist and you can re-attach across restarts.
+console. Each service runs **natively** on Pomelo's own managed PTY holder
+— a real process in your login shell, **not** a container. That's lighter
+and faster than Dockerizing every service (no image builds, no per-service
+container overhead), and it uses your machine's tools directly (nvm, rbenv,
+…). Logs persist and you can re-attach across restarts.
 
 ```yaml
 services:
@@ -52,11 +55,13 @@ Start and stop services from the **service board** in the app. See
 ## Shared services
 
 Containers shared across all workspaces — Postgres, Redis, MinIO,
-OpenSearch — declared under `shared_services:`. One set of containers
-backs every workspace; isolation happens at the *data* layer (per-branch
-databases, capacity slots), not by running N copies. Pomelo starts them
-with docker-compose and exposes them on automatically allocated,
-conflict-free ports.
+OpenSearch — declared under `shared_services:`. **Docker is reserved for
+these data/infra services** (the things you don't want to install and
+version-manage by hand); your own repo services stay native. One set of
+containers backs every workspace; isolation happens at the *data* layer
+(per-branch databases, capacity slots), not by running N copies. Pomelo
+starts them with docker-compose and exposes them on automatically
+allocated, conflict-free ports.
 
 ```yaml
 shared_services:

@@ -1,7 +1,11 @@
 # Services
 
 Each long-running process — a web server, a worker, a console — is a
-**service**. Services run on Pomelo's own managed PTY holders, so logs
+**service**. Services run **natively** on Pomelo's own managed PTY holders
+— real processes, not containers — so they start fast, use your machine's
+toolchains (nvm, rbenv, …) directly, and cost far less than Dockerizing
+everything. Docker is reserved for shared data/infra
+([shared services](./concepts#shared-services): Postgres, Redis, …). Logs
 persist and you can re-attach across restarts.
 
 ## Declare
