@@ -1,8 +1,23 @@
 <script setup>
 // Bespoke landing (tablepro-style): numbered mono eyebrows + two-tone headlines,
 // text-only media placeholders you swap for real screenshots/video later.
+import { ref, onMounted } from 'vue'
 const DL = 'https://github.com/toantran292/pomelo-releases/releases/latest'
 const GH = 'https://github.com/toantran292/pomelo-releases'
+
+// Version + download size read live from the latest GitHub release, so the site
+// never goes stale on a new release (fallback to the last-known values offline).
+const version = ref('0.11.0')
+const dmgMB = ref(20)
+onMounted(async () => {
+  try {
+    const r = await fetch('https://api.github.com/repos/toantran292/pomelo-releases/releases/latest')
+    const j = await r.json()
+    if (j.tag_name) version.value = String(j.tag_name).replace(/^v/, '')
+    const dmg = (j.assets || []).find(a => a.name && a.name.endsWith('.dmg'))
+    if (dmg?.size) dmgMB.value = Math.round(dmg.size / 1e6)
+  } catch { /* keep fallbacks */ }
+})
 </script>
 
 <template>
@@ -11,7 +26,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
   <section class="ph-wrap ph-hero">
     <div class="hero-cols">
       <div class="hero-text">
-        <div class="eyebrow">POMELO · v0.10.25 · NATIVE macOS APP</div>
+        <div class="eyebrow">POMELO · v{{ version }} · NATIVE macOS APP</div>
         <h1>A dev environment.<br><span class="muted">One per branch.</span></h1>
         <p class="lead">A native macOS app that spins up a full, isolated, runnable
           environment for every branch — services, databases, and shared infra,
@@ -20,7 +35,7 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
           <a class="btn primary" :href="DL">Download for macOS</a>
           <a class="btn ghost" :href="GH">View source</a>
         </div>
-        <div class="ph-meta">macOS 14+ · Apple Silicon &amp; Intel · Notarized · No account · ~28 MB</div>
+        <div class="ph-meta">macOS 14+ · Apple Silicon &amp; Intel · Notarized · No account · ~{{ dmgMB }} MB download</div>
       </div>
       <img class="hero-icon" src="/hero-icon.png" alt="Pomelo" />
     </div>
@@ -53,24 +68,39 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
     </div>
   </section>
 
-  <!-- 03 NATIVE -->
+  <!-- 03 DATABASE -->
   <section class="ph-wrap ph-sec">
     <div class="sec-head">
-      <div class="eyebrow"><span class="bar"></span>03 · NATIVE</div>
+      <div class="eyebrow"><span class="bar"></span>03 · DATABASE</div>
+      <h2>Your branch's data, right in the app.<br><span class="muted">No second tool to check a row.</span></h2>
+    </div>
+    <div class="grid3">
+      <div class="pt"><h3>Browse &amp; query</h3><p>A tree of every per-branch database down to its tables. Open a table as a data grid, or run SQL in a console with syntax highlighting and schema-aware autocomplete.</p></div>
+      <div class="pt"><h3>Postgres &amp; Redis</h3><p>Inspect Postgres tables and Redis keyspaces over the same connection your services use — wired automatically, nothing to configure.</p></div>
+      <div class="pt"><h3>Your agent can too</h3><p>Claude in the workspace lists tables and queries the branch database over MCP while it builds — no copy-pasting connection strings.</p></div>
+    </div>
+    <p class="fine">A convenience for quick checks while you work — a supportive part of the workflow, not a replacement for a full-featured database IDE.</p>
+    <div class="ph-media">Database browser — drop a screenshot here</div>
+  </section>
+
+  <!-- 04 NATIVE -->
+  <section class="ph-wrap ph-sec">
+    <div class="sec-head">
+      <div class="eyebrow"><span class="bar"></span>04 · NATIVE</div>
       <h2>Written in Swift, not in Electron.<br><span class="muted">Here's what that gets you.</span></h2>
     </div>
     <div class="specs">
       <div class="spec"><b>120fps</b><span>built for ProMotion; streams and terminals stay smooth</span></div>
       <div class="spec"><b>Portless</b><span>the Go core links in-process over FFI — no localhost server</span></div>
       <div class="spec"><b>Notarized</b><span>Apple Developer ID, no Gatekeeper prompts</span></div>
-      <div class="spec"><b>~28 MB</b><span>self-contained app, no separate runtime</span></div>
+      <div class="spec"><b>~{{ dmgMB }} MB</b><span>signed DMG download; self-contained, no separate runtime</span></div>
     </div>
   </section>
 
   <!-- 04 AGENTS -->
   <section class="ph-wrap ph-sec">
     <div class="sec-head">
-      <div class="eyebrow"><span class="bar"></span>04 · AGENTS</div>
+      <div class="eyebrow"><span class="bar"></span>05 · AGENTS</div>
       <h2>Config that writes itself.<br><span class="muted">Point it at repos; the agent does the rest.</span></h2>
     </div>
     <div class="grid3">
@@ -84,13 +114,13 @@ const GH = 'https://github.com/toantran292/pomelo-releases'
   <!-- 05 GET STARTED -->
   <section class="ph-wrap ph-sec">
     <div class="sec-head">
-      <div class="eyebrow"><span class="bar"></span>05 · GET STARTED</div>
+      <div class="eyebrow"><span class="bar"></span>06 · GET STARTED</div>
       <h2>Install it and open a branch.<br><span class="muted">There's nothing to sign up for.</span></h2>
     </div>
     <div class="grid2 gs">
       <div>
         <h3>Download</h3>
-        <p>macOS 14 or later. Apple Silicon and Intel. About 28 MB.</p>
+        <p>macOS 14 or later. Apple Silicon and Intel. About {{ dmgMB }} MB to download.</p>
         <div class="ph-actions"><a class="btn primary" :href="DL">Download for macOS</a></div>
         <p class="fine">Open the DMG, drag Pomelo to Applications, launch it, and point it at the folder that holds your repos.</p>
       </div>

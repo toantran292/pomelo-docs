@@ -68,6 +68,23 @@ To work on a feature, create a workspace for a branch (see
 every branch gets its own ports, databases, and env, so you can run
 several at once.
 
+## 7. Browse the database
+
+Open the **Database** tab (⌘4) to inspect a branch's data without leaving
+the app or launching a separate client. Pomelo already knows the connection,
+so there's nothing to configure:
+
+- A tree of every per-branch database down to its tables (Postgres) and
+  keyspaces (Redis).
+- Click a table to open it as a data grid with WHERE / ORDER BY and paging,
+  a record panel that shows one row vertically, and streamed CSV export.
+- Or run SQL in a console with syntax highlighting and schema-aware
+  autocomplete.
+
+It's a convenience for quick checks while you work — a supportive part of the
+workflow, not a replacement for a full-featured database IDE. The workspace's
+Claude agent can query the same databases over MCP while it builds.
+
 ## Writing `pom.yml` by hand
 
 If you'd rather author the config yourself, here's a minimal shape:

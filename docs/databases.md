@@ -83,3 +83,20 @@ repos:
 
 These run after the worktree exists, the env file is written, and the
 databases have been created — so `DATABASE_URL` is set correctly.
+
+## Browsing data in the app
+
+The **Database** tab (⌘4) inspects a branch's data without a separate DB
+client. Pomelo already knows the connection, so there's nothing to wire up:
+
+- A tree of every per-branch database down to its tables (Postgres) and
+  keyspaces (Redis).
+- Click a table to open it as a data grid with WHERE / ORDER BY and paging;
+  a record panel shows one row vertically and export streams the full result
+  to CSV.
+- A SQL console with syntax highlighting and schema-aware autocomplete.
+
+It's a convenience for quick checks during development — a supportive part of
+the workflow, not a replacement for a full-featured database IDE. The
+workspace's [Claude agent](./workspace#agent-tools-mcp) can query the same
+databases over MCP while it works.
